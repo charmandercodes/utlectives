@@ -1,0 +1,31 @@
+{
+  "name": "progsoc2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charmandercodes/utlectives.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/charmandercodes/utlectives/issues"
+  },
+  "homepage": "https://github.com/charmandercodes/utlectives#readme",
+  "devDependencies": {
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.7",
+    "alpinejs": "^3.14.9",
+    "flowbite": "^3.1.2",
+    "htmx.org": "^2.0.4",
+    "tailwindcss": "^4.1.7"
+  }
+}

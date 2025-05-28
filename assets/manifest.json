@@ -1,0 +1,8 @@
+{
+  "static/js/main.js": {
+    "file": "django-assets/test-DWHuGx1L.js",
+    "name": "test",
+    "src": "static/js/main.js",
+    "isEntry": true
+  }
+}

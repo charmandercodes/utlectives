@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Basic Page{% endblock %}
+
+{% block content %}
+    <div x-data="{isOpen: false}">
+        <h2>Basic View Page</h2>
+        <p>This is content from your basic view!</p>
+
+        <button @click="isOpen = !isOpen">
+            Click me to test alpine functionality
+        </button>
+        <button x-show="isOpen" class="text-white bg-black " hx-get="{% url 'basic-view' %}">Click me to test htmx</button>
+    </div>
+
+{% endblock %}
