@@ -6,3 +6,5 @@ from django.http import HttpResponse
 def basicView(request):
     return render(request, 'a_users/page.html')
 
+def termsView(request):
+    return render(request, 'pages/terms.html')

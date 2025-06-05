@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "a_users",
     "django_vite",
+    "a_reviews",
 ]
 
 MIDDLEWARE = [
