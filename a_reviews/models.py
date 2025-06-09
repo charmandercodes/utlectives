@@ -35,7 +35,3 @@ class Review(models.Model):
     def __str__(self):
         return f"Review of {self.course.code} by {self.author.username}"
 
-
-
-    
-    
