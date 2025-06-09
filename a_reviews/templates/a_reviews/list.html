@@ -41,13 +41,18 @@
                         </div>
                         
                         <!-- Semester Tags - Bottom aligned -->
+                        
                         <div class="flex justify-center gap-2 mt-auto">
-                        <span class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-3 py-1.5 rounded-full cursor-pointer transition-colors">
-                            Semester 1
-                        </span>
-                        <span class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-3 py-1.5 rounded-full cursor-pointer transition-colors">
-                            Semester 2
-                        </span>
+                            {% for session in course.sessions %}
+                                <span class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-3 py-1.5 rounded-full cursor-pointer transition-colors">
+                                    {{ session }}
+                                </span>
+                            {% empty %}
+                                <!-- Fallback if no sessions are defined -->
+                                <span class="bg-gray-400 text-white text-sm font-medium px-3 py-1.5 rounded-full">
+                                    No sessions available
+                                </span>
+                            {% endfor %}
                         </div>
                     </div>
                 </a>
