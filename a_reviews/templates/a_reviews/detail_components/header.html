@@ -1,0 +1,24 @@
+<div class="flex flex-col items-left justify-center h-48 rounded-sm bg-gray-50 dark:bg-gray-900 dark:text-white p-6 mb-8">
+    <h1 class="mb-6 text-7xl font-bold font-sans text-orange-500">{{ course.name }}</h1>
+    
+    <div class="flex items-center gap-4">
+        <a href="{{ course.page_reference }}" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961"/>
+            </svg>
+            <h2 class="text-3xl font-bold font-sans">{{ course.code }}</h2>
+        </a>
+        
+        <div class="flex gap-2 flex-wrap">
+            {% for session in course.sessions %}
+                <span class="bg-blue-500 hover:bg-blue-600 text-white text-base font-medium px-4 py-2 rounded-full cursor-pointer transition-colors">
+                    {{ session }}
+                </span>
+            {% empty %}
+                <span class="bg-gray-400 text-white text-base font-medium px-4 py-2 rounded-full">
+                    No sessions available
+                </span>
+            {% endfor %}
+        </div>
+    </div>
+</div>

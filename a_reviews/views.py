@@ -10,6 +10,13 @@ def course_list(request):
 
 def course_details(request, code):
     course = get_object_or_404(Course, code=code)
-    return render(request, 'a_reviews/detail.html', {'course': course})
+    reviews = course.review_set.all().order_by('-review_date')  # Get all reviews for this course
+    
+    context = {
+        'course': course,
+        'reviews': reviews,
+    }
+    
+    return render(request, 'a_reviews/detail.html', context)
 
 
