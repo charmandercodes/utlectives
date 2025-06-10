@@ -11,3 +11,5 @@ def course_list(request):
 def course_details(request, code):
     course = get_object_or_404(Course, code=code)
     return render(request, 'a_reviews/detail.html', {'course': course})
+
+
