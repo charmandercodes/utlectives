@@ -1,6 +1,7 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
-from a_reviews.models import Course
+from a_reviews.forms import ReviewForm
+from a_reviews.models import Course, Review
 
 # Create your views here.
 
@@ -19,4 +20,30 @@ def course_details(request, code):
     
     return render(request, 'a_reviews/detail.html', context)
 
+
+
+def review_create_view(request, code):  # Accept course code parameter
+    course = get_object_or_404(Course, code=code)  # Get the specific course
+    
+    # Check if user already reviewed this course (optional)
+    # if Review.objects.filter(course=course, author=request.user).exists():
+    #     # User already reviewed this course
+    #     return redirect('course-detail', code=code)
+    
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)  # Don't save to DB yet
+            review.course = course           # Set the course
+            review.author = request.user     # Set the author
+            review.save()                    # Now save to DB
+            return redirect('course-detail', code=code)  # Redirect to course page
+    else:
+        form = ReviewForm()
+    
+    context = {
+        'form': form,
+        'course': course
+    }
+    return render(request, 'a_reviews/review_form.html', context)
 

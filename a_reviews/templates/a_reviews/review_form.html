@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block title %} Review Form {% endblock %}
+
+{% block content %}
+<div class="p-4 ml-16">
+    <div class="p-4 rounded-lg dark:border-gray-700 mt-8">
+        
+        <!-- Modal-style container -->
+        <div class="relative max-h-full w-full max-w-2xl mx-auto p-4">
+            <!-- Modal content -->
+            <div class="relative rounded-lg bg-white shadow dark:bg-gray-800">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-700 md:p-5">
+                    <div>
+                        <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">Add a review for:</h3>
+                        <span class="font-medium text-blue-600 hover:underline dark:text-blue-400">{{ course.code }} - {{ course.name }}</span>
+                    </div>
+                </div>
+                
+                <!-- Modal body -->
+                <form method="POST" class="p-4 md:p-5">
+                    {% csrf_token %}
+                    <div class="mb-4 grid grid-cols-2 gap-4">
+                        <!-- Overall Rating with Stars -->
+                        <div class="col-span-2">
+                            <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Overall Rating</label>
+                            <div class="flex items-center mb-2">
+                                {% for i in "12345" %}
+                                    <svg class="h-6 w-6 text-gray-300 dark:text-gray-500 cursor-pointer hover:text-yellow-300" 
+                                         data-rating="{{ forloop.counter }}" 
+                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                    </svg>
+                                {% endfor %}
+                                <span class="ms-2 text-lg font-bold text-gray-900 dark:text-white" id="rating-display">0 out of 5</span>
+                            </div>
+                            {{ form.overall_rating }}
+                        </div>
+                        
+                        <!-- Title -->
+                        <div class="col-span-2">
+                            <label for="{{ form.title.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.title.label }}</label>
+                            <input type="text" 
+                                   name="{{ form.title.name }}" 
+                                   id="{{ form.title.id_for_label }}" 
+                                   value="{{ form.title.value|default:'' }}"
+                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" 
+                                   placeholder="Enter a title for your review" />
+                        </div>
+                        
+                        <!-- Review Description -->
+                        <div class="col-span-2">
+                            <label for="{{ form.text_review.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.text_review.label }}</label>
+                            <textarea name="{{ form.text_review.name }}" 
+                                      id="{{ form.text_review.id_for_label }}" 
+                                      rows="6" 
+                                      class="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" 
+                                      placeholder="Share your experience with this course...">{{ form.text_review.value|default:'' }}</textarea>
+                        </div>
+                        
+                        <!-- Rating Categories -->
+                        <div class="col-span-2">
+                            <h4 class="mb-4 text-sm font-medium text-gray-900 dark:text-white">Rate Different Aspects</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                
+                                <!-- Enjoyment -->
+                                <div>
+                                    <label class="mb-2 block text-xs font-medium text-gray-900 dark:text-white">{{ form.enjoyment.label }}</label>
+                                    {{ form.enjoyment }}
+                                </div>
+                                
+                                <!-- Usefulness -->
+                                <div>
+                                    <label class="mb-2 block text-xs font-medium text-gray-900 dark:text-white">{{ form.usefullness.label }}</label>
+                                    {{ form.usefullness }}
+                                </div>
+                                
+                                <!-- Manageability -->
+                                <div>
+                                    <label class="mb-2 block text-xs font-medium text-gray-900 dark:text-white">{{ form.manageability.label }}</label>
+                                    {{ form.manageability }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course Completion -->
+                        <div class="col-span-1">
+                            <label for="{{ form.course_completion.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.course_completion.label }}</label>
+                            {{ form.course_completion }}
+                        </div>
+                        
+                        <!-- Grade -->
+                        <div class="col-span-1">
+                            <label for="{{ form.grade.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.grade.label }} (Optional)</label>
+                            <input type="number" 
+                                   name="{{ form.grade.name }}" 
+                                   id="{{ form.grade.id_for_label }}" 
+                                   value="{{ form.grade.value|default:'' }}"
+                                   min="0" max="100" 
+                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" 
+                                   placeholder="Enter your grade (0-100)" />
+                        </div>
+                        
+                        <!-- Anonymous checkbox -->
+                        <div class="col-span-2">
+                            <div class="flex items-center">
+                                <input type="checkbox" 
+                                       name="{{ form.is_anonymous.name }}" 
+                                       id="{{ form.is_anonymous.id_for_label }}" 
+                                       {% if form.is_anonymous.value %}checked{% endif %}
+                                       class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" />
+                                <label for="{{ form.is_anonymous.id_for_label }}" class="ms-2 text-sm font-medium text-gray-500 dark:text-gray-400">{{ form.is_anonymous.label }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Form Actions -->
+                    <div class="border-t border-gray-200 pt-4 dark:border-gray-700 md:pt-5">
+                        <button type="submit" class="me-2 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Submit Review
+                        </button>
+                        <a href="{% url 'course-detail' code=course.code %}" class="me-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for interactive star rating -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('[data-rating]');
+    const ratingDisplay = document.getElementById('rating-display');
+    const hiddenInput = document.getElementById('{{ form.overall_rating.id_for_label }}');
+    
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            
+            // Update hidden input
+            hiddenInput.value = rating;
+            
+            // Update display
+            ratingDisplay.textContent = `${rating} out of 5`;
+            
+            // Update star colors
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.classList.remove('text-gray-300', 'dark:text-gray-500');
+                    s.classList.add('text-yellow-300');
+                } else {
+                    s.classList.remove('text-yellow-300');
+                    s.classList.add('text-gray-300', 'dark:text-gray-500');
+                }
+            });
+        });
+        
+        star.addEventListener('mouseenter', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.classList.add('text-yellow-300');
+                } else {
+                    s.classList.remove('text-yellow-300');
+                }
+            });
+        });
+    });
+    
+    // Reset on mouse leave
+    const container = document.querySelector('.flex.items-center.mb-2');
+    container.addEventListener('mouseleave', function() {
+        const currentRating = parseInt(hiddenInput.value) || 0;
+        stars.forEach((s, index) => {
+            if (index < currentRating) {
+                s.classList.add('text-yellow-300');
+                s.classList.remove('text-gray-300', 'dark:text-gray-500');
+            } else {
+                s.classList.remove('text-yellow-300');
+                s.classList.add('text-gray-300', 'dark:text-gray-500');
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

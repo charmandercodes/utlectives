@@ -62,6 +62,7 @@ class Review(models.Model):
     title = models.CharField(max_length=50, blank=True, null=True)
     text_review = models.TextField(blank=True, null=True)     
     grade = models.IntegerField(blank=True, null=True)
+    is_anonymous = models.BooleanField(default=False)
     
     def __str__(self):
         return f"Review of {self.course.code} by {self.author.username}"
