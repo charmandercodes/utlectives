@@ -1,0 +1,35 @@
+<div class="gap-8 sm:grid sm:grid-cols-3">
+    <div>
+        <dl>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Enjoyment</dt>
+            <dd class="flex items-center mb-3">
+                <div class="w-full bg-gray-200 rounded-sm h-2.5 dark:bg-gray-700 me-2">
+                    <div class="bg-blue-600 h-2.5 rounded-sm dark:bg-blue-500" style="width: {% widthratio course.enjoyment 5 100 %}%"></div>
+                </div>
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ course.enjoyment }}</span>
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <dl>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Usefulness</dt>
+            <dd class="flex items-center mb-3">
+                <div class="w-full bg-gray-200 rounded-sm h-2.5 dark:bg-gray-700 me-2">
+                    <div class="bg-blue-600 h-2.5 rounded-sm dark:bg-blue-500" style="width: {% widthratio course.usefullness 5 100 %}%"></div>
+                </div>
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ course.usefullness }}</span>
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <dl>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Manageability</dt>
+            <dd class="flex items-center mb-3">
+                <div class="w-full bg-gray-200 rounded-sm h-2.5 dark:bg-gray-700 me-2">
+                    <div class="bg-blue-600 h-2.5 rounded-sm dark:bg-blue-500" style="width: {% widthratio course.manageability 5 100 %}%"></div>
+                </div>
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ course.manageability }}</span>
+            </dd>
+        </dl>
+    </div>
+</div>

@@ -7,7 +7,7 @@ from a_reviews.models import Course, Review
 
 def course_list(request):
     courses = Course.objects.all()
-    return render(request, 'a_reviews/page.html', {'courses': courses})
+    return render(request, 'a_reviews/home.html', {'courses': courses})
 
 def course_details(request, code):
     course = get_object_or_404(Course, code=code)
