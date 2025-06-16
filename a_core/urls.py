@@ -15,13 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+
+# urls.py
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path, include
+from django.views.generic import RedirectView
 
 urlpatterns = [
+    path("", RedirectView.as_view(pattern_name='course-list', permanent=False)),  # Redirect to named URL
     path("admin/", admin.site.urls),
     path('users/', include('a_users.urls')),
     path('reviews/', include('a_reviews.urls')),
+    path('accounts/', include('allauth.urls')),
 ]
-
-
+# Note: This assumes you have a URL named 'home' in your a_reviews.urls with namespace 'reviews'
+# If your reviews URLs don't use a namespace, just use pattern_name='home' or whatever the URL name is

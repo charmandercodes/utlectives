@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "a_users",
     "django_vite",
     "a_reviews",
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +52,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "a_core.urls"
@@ -65,6 +68,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -138,3 +142,39 @@ DJANGO_VITE = {
   }
 }
 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  # or 'username' or 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False  # Set to True if you want usernames
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # or 'optional' or 'none'
+
+# Login/Logout URLs
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/reviews'  # Redirect after successful login
+LOGOUT_REDIRECT_URL = '/reviews'  # Redirect after logout
+
+# Session settings (for remember me functionality)
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Password reset settings
+ACCOUNT_PASSWORD_RESET_CONFIRM_URL = '/accounts/password/reset/key/{key}/'
+
+# Additional useful settings
+ACCOUNT_LOGOUT_ON_GET = False  # Require POST for logout
+ACCOUNT_PRESERVE_USERNAME_CASING = False
+ACCOUNT_SESSION_REMEMBER = True  # Enable "remember me" functionality
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # 5 minutes
+
+# Email settings (required for email verification and password reset)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development

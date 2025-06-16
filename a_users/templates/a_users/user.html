@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+User Page
+{% endblock %}
+
+{% block content %}
+<div class="p-4 ml-16">
+    <!-- if user is authenticated -->
+    {% if user.is_authenticated %}
+        <div class="p-4 rounded-lg dark:border-gray-700 mt-8">
+            <!-- Default homepage content -->
+            <div class="flex flex-col items-left justify-center h-48 mb-4 rounded-sm bg-gray-50 dark:bg-gray-900 dark:text-white">
+                <p class="mb-4">&nbsp;</p>
+                <h1 class="mb-4 text-7xl font-bold font-sans text-white">Welcome<span class="text-orange-500"> {{ user }}</span></h1>
+                <p>Manage your account and reviews here</p>
+            </div>
+
+            <!-- Tab System -->
+            <div x-data="{ activeTab: 'account' }" class="mb-4">
+                <!-- Tab Navigation -->
+                <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
+                    <nav class="-mb-px flex space-x-8">
+                        <button 
+                            @click="activeTab = 'account'"
+                            :class="activeTab === 'account' ? 'border-orange-500 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                            class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                            Account
+                        </button>
+                        <button 
+                            @click="activeTab = 'reviews'"
+                            :class="activeTab === 'reviews' ? 'border-orange-500 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                            class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                            Reviews ({{ reviews_count }})
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="mt-4">
+                    <!-- Account Tab Content -->
+                    <div x-show="activeTab === 'account'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
+                            <h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Account Settings</h2>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Manage your account information and preferences.</p>
+                            
+                            <!-- Add your account content here -->
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Username</label>
+                                    <p class="text-gray-900 dark:text-white">{{ user.username }}</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                                    <p class="text-gray-900 dark:text-white">{{ user.email }}</p>
+                                </div>
+                                <!-- Add more account fields as needed -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab Content -->
+                    <div x-show="activeTab === 'reviews'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Your Course Reviews</h2>
+                                <span class="bg-orange-100 text-orange-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-orange-900 dark:text-orange-300">
+                                    {{ reviews_count }} review{{ reviews_count|pluralize }}
+                                </span>
+                            </div>
+                            
+                            <!-- Reviews List -->
+                            {% if reviews %}
+                                <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Include your existing review component that handles the loop -->
+                                    {% include 'a_reviews/detail_components/review.html' with show_edit_buttons=True %}
+                                </div>
+                            {% else %}
+                                <!-- Empty state when no reviews -->
+                                <div class="text-center py-12">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No reviews yet</h3>
+                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by writing your first course review.</p>
+                                    <div class="mt-6">
+                                        <a href="{% url 'course_list' %}" 
+                                           class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                                            Browse Courses
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <h1 class="text-3xl font-bold mb-4">Welcome to the User Page</h1>
+        <p class="mb-4">Please log in to access your account.</p>
+    {% endif %}
+</div>
+{% endblock %}
