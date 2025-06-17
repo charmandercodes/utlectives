@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from a_reviews.forms import ReviewForm
 from django.contrib.auth import logout
+from allauth.account.utils import send_email_confirmation
 # Create your views here.
 
 @login_required
@@ -116,4 +117,10 @@ def delete_account(request):
     # If GET request, redirect back to account page
     return redirect('user-page')
 
+
+@login_required
+def resend_verification_email(request):
+    if request.method == 'POST':
+        send_email_confirmation(request, request.user)
+        messages.success(request, 'Verification email sent!')
 
