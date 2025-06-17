@@ -15,7 +15,9 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-700 md:p-5">
                     <div>
-                        <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">Add a review for:</h3>
+                        <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                            {% if is_update %}Edit your review for:{% else %}Add a review for:{% endif %}
+                        </h3>
                         <span class="font-medium text-blue-600 hover:underline dark:text-blue-400">{{ course.code }} - {{ course.name }}</span>
                     </div>
                 </div>
@@ -166,7 +168,8 @@
                         <button type="submit" class="me-2 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             Submit Review
                         </button>
-                        <a href="{% url 'course-detail' code=course.code %}" class="me-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
+                        <a href="{% if is_update %}{% url 'user-page' %}{% else %}{% url 'course-detail' course.code %}{% endif %}" 
+                            class="me-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
                             Cancel
                         </a>
                     </div>
@@ -179,6 +182,54 @@
 <!-- JavaScript for interactive star rating -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Function to initialize star rating display for existing values
+    function initializeStarRating(fieldName) {
+        const stars = document.querySelectorAll(`[data-field="${fieldName}"]`);
+        const display = document.getElementById(`${fieldName}-display`);
+        const hiddenInput = document.getElementById(`id_${fieldName}`);
+        
+        // Get the current value and set initial display
+        const currentValue = parseInt(hiddenInput.value) || 0;
+        if (currentValue > 0) {
+            display.textContent = `${currentValue} out of 5`;
+            
+            // Set star colors based on current value
+            stars.forEach((star, index) => {
+                if (index < currentValue) {
+                    star.classList.remove('text-gray-300', 'dark:text-gray-500');
+                    star.classList.add('text-yellow-300');
+                } else {
+                    star.classList.remove('text-yellow-300');
+                    star.classList.add('text-gray-300', 'dark:text-gray-500');
+                }
+            });
+        }
+    }
+    
+    // Function to initialize overall rating
+    function initializeOverallRating() {
+        const overallStars = document.querySelectorAll('[data-rating]:not([data-field])');
+        const overallDisplay = document.getElementById('rating-display');
+        const overallInput = document.getElementById('id_overall_rating');
+        
+        // Get the current value and set initial display
+        const currentValue = parseInt(overallInput.value) || 0;
+        if (currentValue > 0) {
+            overallDisplay.textContent = `${currentValue} out of 5`;
+            
+            // Set star colors based on current value
+            overallStars.forEach((star, index) => {
+                if (index < currentValue) {
+                    star.classList.remove('text-gray-300', 'dark:text-gray-500');
+                    star.classList.add('text-yellow-300');
+                } else {
+                    star.classList.remove('text-yellow-300');
+                    star.classList.add('text-gray-300', 'dark:text-gray-500');
+                }
+            });
+        }
+    }
+    
     // Function to handle star rating for any field
     function setupStarRating(fieldName) {
         const stars = document.querySelectorAll(`[data-field="${fieldName}"]`);
@@ -240,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Setup star rating for overall rating (different structure)
     const overallStars = document.querySelectorAll('[data-rating]:not([data-field])');
     const overallDisplay = document.getElementById('rating-display');
-    const overallInput = document.getElementById('{{ form.overall_rating.id_for_label }}');
+    const overallInput = document.getElementById('id_overall_rating');
     
     overallStars.forEach(star => {
         star.addEventListener('click', function() {
@@ -293,7 +344,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Setup star ratings for all fields
+    // Initialize all star ratings with existing values
+    initializeOverallRating();
+    initializeStarRating('enjoyment');
+    initializeStarRating('usefullness');
+    initializeStarRating('manageability');
+    
+    // Setup interactive star ratings
     setupStarRating('enjoyment');
     setupStarRating('usefullness');
     setupStarRating('manageability');

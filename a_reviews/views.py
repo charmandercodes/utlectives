@@ -43,7 +43,8 @@ def review_create_view(request, code):  # Accept course code parameter
     
     context = {
         'form': form,
-        'course': course
+        'course': course,
+        'is_update': False  # Add this flag for create view
     }
     return render(request, 'a_reviews/review_form.html', context)
 
