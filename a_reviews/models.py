@@ -57,7 +57,8 @@ class Review(models.Model):
     usefullness = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     manageability = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     review_date = models.DateTimeField(auto_now_add=True)
-    course_completion = models.CharField(max_length=20)
+    course_completion = models.CharField(max_length=20, help_text="Format: YYYY-Season (e.g., 2025-Autumn)")
+    
     # not required 
     title = models.CharField(max_length=50, blank=True, null=True)
     text_review = models.TextField(blank=True, null=True)     

@@ -2,6 +2,17 @@ from django import forms
 from .models import Review
 
 class ReviewForm(forms.ModelForm):
+
+    course_completion = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500',
+            'placeholder': '2025-Autumn',
+            'pattern': r'\d{4}-(Autumn|Spring|Summer|Winter)',
+            'title': 'Please enter in format: YYYY-Season (e.g., 2025-Autumn)'
+        })
+    )
+
     class Meta:
         model = Review
         fields = [
@@ -72,19 +83,7 @@ class ReviewForm(forms.ModelForm):
                 'placeholder': 'Enter your grade (0-100)',
                 'step': 1
             }),
-            
-            'course_completion': forms.Select(
-                choices=[
-                    ('completed', 'Completed'),
-                    ('in_progress', 'In Progress'),
-                    ('dropped', 'Dropped'),
-                    ('audited', 'Audited')
-                ],
-                attrs={
-                    'class': 'form-select',
-                }
-            ),
-            
+                        
             'is_anonymous': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
             })

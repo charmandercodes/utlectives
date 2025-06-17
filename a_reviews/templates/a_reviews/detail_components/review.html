@@ -18,7 +18,12 @@
                 {% endfor %}
             </div>
             <div class="space-y-0.5">
-                <p class="text-base font-semibold text-gray-900 dark:text-white"> {{review.author}} </p>
+                
+                {% if review.is_anonymous %}
+                    <p class="text-base font-semibold text-gray-900 dark:text-white"> anon </p>
+                {% else %}
+                    <p class="text-base font-semibold text-gray-900 dark:text-white"> {{review.author}} </p>
+                {% endif %}
                 <p class="text-sm font-normal text-gray-500 dark:text-gray-400"> {{ review.review_date }}</p>
             </div>
         </div>
