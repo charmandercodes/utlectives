@@ -1,0 +1,158 @@
+<div x-show="activeTab === 'account'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-700">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Account Settings</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">Manage your account information and preferences.</p>
+        
+        <!-- Add your account content here -->
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Username</label>
+                <div class="flex items-center space-x-3">
+                    <!-- Display mode -->
+                    <div id="username-display" class="flex items-center space-x-2">
+                        <p class="text-gray-900 dark:text-white">{{ user.username }}</p>
+                        <button onclick="editUsername()" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                            Edit
+                        </button>
+                    </div>
+                    
+                    <!-- Edit mode (hidden by default) -->
+                    <div id="username-edit" class="hidden flex items-center space-x-2 w-full">
+                        <form method="post" action="{% url 'update-username' %}" class="flex items-center space-x-2 w-full">
+                            {% csrf_token %}
+                            <input 
+                                type="text" 
+                                name="username" 
+                                value="{{ user.username }}"
+                                class="flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required
+                            >
+                            <button type="submit" class="text-sm bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700">
+                                Save
+                            </button>
+                            <button type="button" onclick="cancelEdit()" class="text-sm bg-gray-500 text-white px-3 py-2 rounded-lg hover:bg-gray-600">
+                                Cancel
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more account fields as needed -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                <div class="flex items-center space-x-3">
+                    <p class="text-gray-900 dark:text-white">{{ user.email }}</p>
+                    {% for email_address in user.emailaddress_set.all %}
+                        {% if email_address.email == user.email %}
+                            {% if email_address.verified %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Verified
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Pending Verification
+                                </span>
+                                <a href="{% url 'account_email_verification_sent' %}" 
+                                    class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                    Resend verification email
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Add this after your email section -->
+            <div class="pt-6 border-t border-gray-200 dark:border-gray-600">
+                <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+                    <h3 class="text-lg font-medium text-red-800 dark:text-red-200 mb-2">Danger Zone</h3>
+                    <p class="text-sm text-red-700 dark:text-red-300 mb-3">
+                        Once you delete your account, there is no going back. Please be certain.
+                    </p>
+                    <button onclick="showDeleteConfirm()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-medium">
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+
+            <!-- Delete Confirmation Modal (hidden by default) -->
+            <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Confirm Account Deletion</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        Are you absolutely sure? This action cannot be undone. This will permanently delete your account and remove all your reviews.
+                    </p>
+                    
+                    <form method="post" action="{% url 'delete-account' %}" class="space-y-3">
+                        {% csrf_token %}
+                        <div>
+                            <label class="block text-sm text-gray-700 dark:text-gray-300 mb-2">
+                                Type your username to confirm:
+                            </label>
+                            <input 
+                                type="text" 
+                                id="confirm-username"
+                                placeholder="{{ user.username }}"
+                                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button type="submit" id="delete-confirm-btn" disabled class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                Delete My Account
+                            </button>
+                            <button type="button" onclick="hideDeleteConfirm()" class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function editUsername() {
+        document.getElementById('username-display').classList.add('hidden');
+        document.getElementById('username-edit').classList.remove('hidden');
+    }
+    
+    function cancelEdit() {
+        document.getElementById('username-edit').classList.add('hidden');
+        document.getElementById('username-display').classList.remove('hidden');
+    }
+
+    function editUsername() {
+    document.getElementById('username-display').classList.add('hidden');
+    document.getElementById('username-edit').classList.remove('hidden');
+    }
+
+    function cancelEdit() {
+        document.getElementById('username-edit').classList.add('hidden');
+        document.getElementById('username-display').classList.remove('hidden');
+    }
+
+    function showDeleteConfirm() {
+        document.getElementById('delete-modal').classList.remove('hidden');
+    }
+
+    function hideDeleteConfirm() {
+        document.getElementById('delete-modal').classList.add('hidden');
+        document.getElementById('confirm-username').value = '';
+        document.getElementById('delete-confirm-btn').disabled = true;
+    }
+
+    // Enable delete button only when username matches
+    document.getElementById('confirm-username').addEventListener('input', function() {
+        const confirmBtn = document.getElementById('delete-confirm-btn');
+        const expectedUsername = '{{ user.username }}';
+        
+        if (this.value === expectedUsername) {
+            confirmBtn.disabled = false;
+        } else {
+            confirmBtn.disabled = true;
+        }
+    });
+</script>

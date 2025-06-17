@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from a_reviews.forms import ReviewForm
 from a_reviews.models import Course, Review
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def course_list(request):
@@ -21,7 +21,7 @@ def course_details(request, code):
     return render(request, 'a_reviews/detail.html', context)
 
 
-
+@login_required
 def review_create_view(request, code):  # Accept course code parameter
     course = get_object_or_404(Course, code=code)  # Get the specific course
     

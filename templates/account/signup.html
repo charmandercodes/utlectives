@@ -35,9 +35,12 @@
                             id="{{ form.email.id_for_label }}" 
                             value="{{ form.email.value|default:'' }}"
                             class="bg-gray-50 border {% if form.email.errors %}border-red-500{% else %}border-gray-300{% endif %} text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                            placeholder="{% trans 'Enter your email address' %}" 
+                            placeholder="name@student.uts.edu.au" 
                             required
                         >
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                            Only UTS student email addresses are accepted
+                        </p>
                         {% if form.email.errors %}
                             <div class="mt-2 text-sm text-red-600 dark:text-red-500">
                                 {% for error in form.email.errors %}

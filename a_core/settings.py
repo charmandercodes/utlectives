@@ -178,3 +178,10 @@ ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # 5 minutes
 
 # Email settings (required for email verification and password reset)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
+
+
+
+
+ACCOUNT_FORMS = {
+    'signup': 'a_users.forms.CustomSignupForm',  # Replace 'your_app_name' with your actual app name
+}

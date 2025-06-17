@@ -1,8 +1,11 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from a_reviews.models import Review
+from django.contrib import messages
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from a_reviews.forms import ReviewForm
+from django.contrib.auth import logout
 # Create your views here.
 
 @login_required
@@ -55,5 +58,62 @@ def update_users_review(request, review_id):
         'is_update': True  # Optional flag to differentiate between create/update
     })
 
+
+
+@login_required
+def update_username(request):
+    if request.method == 'POST':
+        new_username = request.POST.get('username', '').strip()
+        
+        if not new_username:
+            messages.error(request, 'Username cannot be empty.')
+            return redirect('user-page')
+        
+        # Basic security validation
+        import re
+        
+        # Length check
+        if len(new_username) < 3 or len(new_username) > 30:
+            messages.error(request, 'Username must be 3-30 characters.')
+            return redirect('user-page')
+        
+        # Only allow safe characters
+        if not re.match(r'^[a-zA-Z0-9_-]+$', new_username):
+            messages.error(request, 'Username can only contain letters, numbers, underscores, and hyphens.')
+            return redirect('user-page')
+        
+        # Check if username already exists
+        if User.objects.filter(username=new_username).exclude(id=request.user.id).exists():
+            messages.error(request, 'Username already taken.')
+        else:
+            request.user.username = new_username
+            request.user.save()
+            messages.success(request, 'Username updated successfully!')
+    
+    return redirect('user-page')
+
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+        
+        # Optional: Send goodbye email
+        # send_goodbye_email(user.email)
+        
+        # Log the user out first
+        logout(request)
+        
+        # Delete the user account
+        user.delete()
+        
+        # Add a message (will be shown on redirect page)
+        messages.success(request, 'Your account has been successfully deleted.')
+        
+        # Redirect to homepage or login page
+        return redirect('course-list')
+    
+    # If GET request, redirect back to account page
+    return redirect('user-page')
 
 
