@@ -7,12 +7,12 @@ class ReviewForm(forms.ModelForm):
         max_length=20,
         widget=forms.TextInput(attrs={
             'class': 'block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500',
-            'placeholder': '2025-Autumn',
-            'pattern': r'\d{4}-(Autumn|Spring|Summer|Winter)',
-            'title': 'Please enter in format: YYYY-Season (e.g., 2025-Autumn)'
+            'placeholder': '2025-AUTUMN',
+            'pattern': r'\d{4}-(AUTUMN|SPRING|SUMMER|WINTER)',
+            'title': 'Please enter in format: YYYY-SEASON (e.g., 2025-AUTUMN)'
         })
     )
-
+    
     class Meta:
         model = Review
         fields = [
