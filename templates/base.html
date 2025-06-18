@@ -1,5 +1,4 @@
 {% load django_vite %}
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,21 +17,23 @@
   </head>
   <body class="bg-gray-50 dark:bg-gray-900">
       {% if messages %}
-            <div class="messages mb-4">
+            <!-- Fixed message container at top of screen -->
+            <div class="fixed top-0 left-0 right-0 z-50 p-4 space-y-2">
               {% for message in messages %}
-                  <div class="message-alert p-4 mb-4 text-sm rounded-lg relative flex items-center justify-between
+                  <div class="message-alert p-4 text-sm rounded-lg relative flex items-center justify-between shadow-lg backdrop-blur-sm border
                       {% if message.tags == 'error' %}
-                          text-red-800 bg-red-50 dark:bg-gray-800 dark:text-red-400
+                          text-red-800 bg-red-50/95 border-red-200 dark:bg-red-900/95 dark:text-red-200 dark:border-red-800
                       {% elif message.tags == 'success' %}
-                          text-green-800 bg-green-50 dark:bg-gray-800 dark:text-green-400
+                          text-green-800 bg-green-50/95 border-green-200 dark:bg-green-900/95 dark:text-green-200 dark:border-green-800
                       {% elif message.tags == 'warning' %}
-                          text-yellow-800 bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300
+                          text-yellow-800 bg-yellow-50/95 border-yellow-200 dark:bg-yellow-900/95 dark:text-yellow-200 dark:border-yellow-800
                       {% else %}
-                          text-blue-800 bg-blue-50 dark:bg-gray-800 dark:text-blue-400
-                      {% endif %}">
-                      
+                          text-blue-800 bg-blue-50/95 border-blue-200 dark:bg-blue-900/95 dark:text-blue-200 dark:border-blue-800
+                      {% endif %}
+                      transform translate-y-0 opacity-100 transition-all duration-300 ease-out">
+                                             
                       <span>{{ message }}</span>
-                      
+                                             
                       <!-- Close button -->
                       <button type="button" class="close-message ml-4 inline-flex items-center justify-center w-6 h-6 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors" onclick="dismissMessage(this)">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -43,21 +44,19 @@
               {% endfor %}
           </div>
     {% endif %}
-    
+         
     {% include 'components/sidebar.html' %}
-
-
+      
     {% block content %}
     {% endblock %}
-    
+       
   </body>
-
-  <script>
+   <script>
     // Function to dismiss a single message
     function dismissMessage(button) {
         const messageDiv = button.closest('.message-alert');
         messageDiv.style.opacity = '0';
-        messageDiv.style.transform = 'translateY(-10px)';
+        messageDiv.style.transform = 'translateY(-20px)';
         setTimeout(() => {
             messageDiv.remove();
         }, 300);
@@ -66,23 +65,29 @@
     // Auto-dismiss messages after 5 seconds
     document.addEventListener('DOMContentLoaded', function() {
         const messages = document.querySelectorAll('.message-alert');
-        
-        messages.forEach(function(message) {
-            // Add transition styles
-            message.style.transition = 'all 0.3s ease-out';
+                 
+        messages.forEach(function(message, index) {
+            // Stagger the initial animation
+            message.style.transform = 'translateY(-20px)';
+            message.style.opacity = '0';
             
+            setTimeout(() => {
+                message.style.transform = 'translateY(0)';
+                message.style.opacity = '1';
+            }, index * 100);
+                         
             // Auto-dismiss after 5 seconds (5000ms)
             setTimeout(function() {
-                if (message.parentNode) { // Check if message still exists
+                if (message.parentNode) {
                     message.style.opacity = '0';
-                    message.style.transform = 'translateY(-10px)';
+                    message.style.transform = 'translateY(-20px)';
                     setTimeout(() => {
                         if (message.parentNode) {
                             message.remove();
                         }
                     }, 300);
                 }
-            }, 5000);
+            }, 5000 + (index * 100));
         });
     });
   </script>
