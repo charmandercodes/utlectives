@@ -4,11 +4,18 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<section class="mb-100 bg-gray-50 dark:bg-gray-900 min-h-screen mt-24">
+<section class=" bg-gray-50 dark:bg-gray-900 min-h-screen">
     <div class="flex flex-col items-center justify-start px-6 pt-16 pb-8 mx-auto lg:pt-20">
         <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                <div class="flex justify-center">
+                    <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full dark:bg-blue-900">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5v14m8-7h-2m0 0h-2m2 0v2m0-2v-2M3 11h6m-6 4h6m11 4H4c-.55228 0-1-.4477-1-1V6c0-.55228.44772-1 1-1h16c.5523 0 1 .44772 1 1v12c0 .5523-.4477 1-1 1Z"/>
+                        </svg>                                             
+                    </div>
+                </div>
+                <h1 class="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                     {% trans "Create your account" %}
                 </h1>
                 
@@ -141,7 +148,7 @@
                     </div>
                     
                     <!-- Submit Button -->
-                    <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                    <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-500 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                         {% trans "Create account" %}
                     </button>
                     
