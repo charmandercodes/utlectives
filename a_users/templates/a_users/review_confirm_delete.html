@@ -7,15 +7,11 @@ Delete Review - Confirmation
 
 {% block content %}
 <div class="p-4 ml-16">
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <!-- Changed: Removed min-h-screen and items-center to move content up -->
+    <div class="flex justify-center px-4 sm:px-6 lg:px-8 pt-12">
         <div class="max-w-md w-full space-y-8">
             <!-- Warning Icon -->
             <div class="text-center">
-                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/20">
-                    <svg class="h-8 w-8 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 19.5c-.77.833.192 2.5 1.732 2.5z" />
-                    </svg>
-                </div>
                 
                 <!-- Title -->
                 <h2 class="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
@@ -34,6 +30,7 @@ Delete Review - Confirmation
                 </p>
             </div>
 
+            <!-- Review Preview -->
             <!-- Review Preview (if you want to show which review) -->
             {% if review %}
             <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">

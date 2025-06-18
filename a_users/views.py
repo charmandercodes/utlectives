@@ -118,9 +118,4 @@ def delete_account(request):
     return redirect('user-page')
 
 
-@login_required
-def resend_verification_email(request):
-    if request.method == 'POST':
-        send_email_confirmation(request, request.user)
-        messages.success(request, 'Verification email sent!')
 
