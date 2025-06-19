@@ -15,6 +15,7 @@ class Course(models.Model):
     overall_rating = models.FloatField(default=0.0)     # Cached average
     sessions = models.JSONField(default=list)
     page_reference = models.URLField(max_length=200, blank=True, null=True)
+    faculty = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return f"{self.code} - {self.name}"
