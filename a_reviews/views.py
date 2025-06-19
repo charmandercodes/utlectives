@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from a_reviews.forms import ReviewForm
 from a_reviews.models import Course, Review
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 # Create your views here.
 
 def course_list(request):
@@ -47,4 +48,14 @@ def review_create_view(request, code):  # Accept course code parameter
         'is_update': False  # Add this flag for create view
     }
     return render(request, 'a_reviews/review_form.html', context)
+
+@login_required
+def search_courses(request):
+    query = request.GET.get('search', '')
+
+    courses = Course.objects.filter(
+        Q(name__icontains=query)
+    )
+
+    return render(request, 'a_reviews/course_list.html', {'courses': courses})
 

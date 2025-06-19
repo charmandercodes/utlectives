@@ -7,61 +7,50 @@
 <div class="p-4 ml-16">
     <div class="p-4 rounded-lg dark:border-gray-700 mt-8">
       <!-- Default homepage content -->
-      <div class="flex flex-col items-left justify-center h-48 mb-4 rounded-sm bg-gray-50 dark:bg-gray-900 dark:text-white">
-        <p class="mb-4">Progsoc presents</p>
-        <h1 class="mb-4 text-7xl font-bold font-sans text-orange-500">utlectives</h1>
-        <p>Your one-stop shop for UTS course and elective reviews</p>
-    </div> 
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 mb-4">
-            {% for course in courses %}
-                <a href="{% url 'course-detail' code=course.code %}" class="block hover:no-underline cursor-pointer"> 
-                    <!-- Course Card -->
-                    <div class="flex flex-col rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-white p-6 h-full shadow-sm hover:shadow-md transition-shadow">
-                        <!-- Header: Course Code and Rating -->
-                        <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ course.code }}</h3>
-                        <div class="flex items-center gap-0.5">
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= course.overall_rating|default:0 %}
-                                    <!-- Filled star (yellow) -->
-                                    <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                    </svg>
-                                {% else %}
-                                    <!-- Empty star (gray) -->
-                                    <svg class="w-4 h-4 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                    </svg>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        </div>
-                        
-                        <!-- Course Name - Centered and flexible -->
-                        <div class="flex-grow flex items-center justify-center mb-6">
-                        <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200 text-center">{{ course.name }}</h4>
-                        </div>
-                        
-                        <!-- Semester Tags - Bottom aligned -->
-                        
-                        <div class="flex justify-center gap-2 mt-auto">
-                            {% for session in course.sessions %}
-                                <span class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-3 py-1.5 rounded-full cursor-pointer transition-colors">
-                                    {{ session }}
-                                </span>
-                            {% empty %}
-                                <!-- Fallback if no sessions are defined -->
-                                <span class="bg-gray-400 text-white text-sm font-medium px-3 py-1.5 rounded-full">
-                                    No sessions available
-                                </span>
-                            {% endfor %}
-                        </div>
+        <div class="flex flex-col items-left justify-center h-48 mb-4 rounded-sm bg-gray-50 dark:bg-gray-900 dark:text-white">
+            <p class="mb-4">Progsoc presents</p>
+            <h1 class="mb-4 text-7xl font-bold font-sans text-orange-500">utlectives</h1>
+            <p>Your one-stop shop for UTS course and elective reviews</p>
+        </div> 
+        
+        <!-- HTMX Search -->
+        <div class="mb-6">
+            <div class="rounded-lg bg-gray-50 dark:bg-gray-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3">
+                    <input 
+                        type="text" 
+                        class="flex-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                        placeholder="Search courses..." 
+                        name="search"
+                        hx-get="{% url 'search' %}"
+                        hx-trigger="keyup changed delay:500ms"
+                        hx-target="#course-list"
+                        hx-indicator="#search-indicator"
+                    />
+                    <div id="search-indicator" class="htmx-indicator">
+                        <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
                     </div>
-                </a>
-            {% endfor %}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                      class="h-6 w-6 text-gray-400 dark:text-gray-500 flex-shrink-0">
+                      <path
+                        fill-rule="evenodd"
+                        d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <div id="course-list">
+            {% include 'a_reviews/course_list.html' %}
         </div>
     </div>
-  </div>
+</div>
 
 {% endblock %}
