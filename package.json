@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/charmandercodes/utlectives#readme",
   "devDependencies": {
+    "daisyui": "^5.0.43",
     "vite": "^6.3.5"
   },
   "dependencies": {
