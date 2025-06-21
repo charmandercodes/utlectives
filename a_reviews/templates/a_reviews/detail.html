@@ -25,12 +25,13 @@
                   {% include 'a_reviews/detail_components/review_bars.html' %}
                   
                   <!-- parent div for individual summaries -->
-                  <div class="mt-6 divide-y divide-gray-200 dark:divide-gray-700">
+                  <div class="mt-6 divide-y divide-gray-200 dark:divide-gray-700" id="review-list">
                     {% include 'a_reviews/detail_components/review.html' %}
                   </div>
                 </div>
               </section>
         </div>
+        {% include 'a_reviews/partials/review-modal.html' %}
     </div>
 </div>
 {% endblock %}

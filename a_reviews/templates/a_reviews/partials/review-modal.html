@@ -1,0 +1,223 @@
+
+<dialog id="contact_modal" class="modal">
+    <div class="modal-box w-11/12 max-w-2xl">
+        <!-- Modal content -->
+        <div class="relative rounded-lg bg-white shadow dark:bg-gray-800">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-700 md:p-5">
+                <div>
+                    <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                        {% if is_update %}Edit your review for:{% else %}Add a review for:{% endif %}
+                    </h3>
+                    <span class="font-medium text-blue-600 hover:underline dark:text-blue-400">{{ course.code }} - {{ course.name }}</span>
+                </div>
+            </div>
+            
+            <!-- Show form errors at the top if any -->
+            {% if form.errors %}
+            <div class="p-4 bg-red-50 border-l-4 border-red-400">
+                <div class="flex">
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-red-800">Please fix the following errors:</h3>
+                        <div class="mt-2 text-sm text-red-700">
+                            <ul class="list-disc pl-5 space-y-1">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li><strong>{{ field }}:</strong> {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Modal body -->
+            <form hx-post="{% url 'htmx-create-review' course.code %}" class="p-4 md:p-5" hx-target="#review-list" hx-swap="afterbegin">
+                {% csrf_token %}
+                <div class="mb-4 grid grid-cols-2 gap-4">
+                    <!-- Overall Rating with DaisyUI Stars -->
+                    <div class="col-span-2">
+                        <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Overall Rating</label>
+                        {% if form.overall_rating.errors %}
+                            <div class="text-red-600 text-sm mb-1">{{ form.overall_rating.errors.0 }}</div>
+                        {% endif %}
+                        <div class="flex items-center mb-2">
+                            <div class="rating">
+                                <input type="radio" name="{{ form.overall_rating.name }}" value="1" class="mask mask-star-2 bg-orange-400" 
+                                    {% if form.overall_rating.value == 1 or form.overall_rating.value == "1" %}checked{% endif %} />
+                                <input type="radio" name="{{ form.overall_rating.name }}" value="2" class="mask mask-star-2 bg-orange-400" 
+                                    {% if form.overall_rating.value == 2 or form.overall_rating.value == "2" %}checked{% endif %} />
+                                <input type="radio" name="{{ form.overall_rating.name }}" value="3" class="mask mask-star-2 bg-orange-400" 
+                                    {% if form.overall_rating.value == 3 or form.overall_rating.value == "3" %}checked{% endif %} />
+                                <input type="radio" name="{{ form.overall_rating.name }}" value="4" class="mask mask-star-2 bg-orange-400" 
+                                    {% if form.overall_rating.value == 4 or form.overall_rating.value == "4" %}checked{% endif %} />
+                                <input type="radio" name="{{ form.overall_rating.name }}" value="5" class="mask mask-star-2 bg-orange-400" 
+                                    {% if form.overall_rating.value == 5 or form.overall_rating.value == "5" %}checked{% endif %} />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Rating Categories with DaisyUI Star Rating -->
+                    <div class="col-span-2">
+                        <div class="grid grid-cols-3 gap-6">
+                            
+                            <!-- Enjoyment Stars -->
+                            <div>
+                                <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.enjoyment.label }}</label>
+                                {% if form.enjoyment.errors %}
+                                    <div class="text-red-600 text-sm mb-1">{{ form.enjoyment.errors.0 }}</div>
+                                {% endif %}
+                                <div class="flex flex-col items-start">
+                                    <div class="rating rating-sm">
+                                        <input type="radio" name="{{ form.enjoyment.name }}" value="1" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.enjoyment.value == 1 or form.enjoyment.value == "1" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.enjoyment.name }}" value="2" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.enjoyment.value == 2 or form.enjoyment.value == "2" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.enjoyment.name }}" value="3" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.enjoyment.value == 3 or form.enjoyment.value == "3" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.enjoyment.name }}" value="4" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.enjoyment.value == 4 or form.enjoyment.value == "4" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.enjoyment.name }}" value="5" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.enjoyment.value == 5 or form.enjoyment.value == "5" %}checked{% endif %} />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Usefulness Stars -->
+                            <div>
+                                <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.usefullness.label }}</label>
+                                {% if form.usefullness.errors %}
+                                    <div class="text-red-600 text-sm mb-1">{{ form.usefullness.errors.0 }}</div>
+                                {% endif %}
+                                <div class="flex flex-col items-start">
+                                    <div class="rating rating-sm">
+                                        <input type="radio" name="{{ form.usefullness.name }}" value="1" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.usefullness.value == 1 or form.usefullness.value == "1" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.usefullness.name }}" value="2" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.usefullness.value == 2 or form.usefullness.value == "2" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.usefullness.name }}" value="3" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.usefullness.value == 3 or form.usefullness.value == "3" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.usefullness.name }}" value="4" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.usefullness.value == 4 or form.usefullness.value == "4" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.usefullness.name }}" value="5" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.usefullness.value == 5 or form.usefullness.value == "5" %}checked{% endif %} />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Manageability Stars -->
+                            <div>
+                                <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.manageability.label }}</label>
+                                {% if form.manageability.errors %}
+                                    <div class="text-red-600 text-sm mb-1">{{ form.manageability.errors.0 }}</div>
+                                {% endif %}
+                                <div class="flex flex-col items-start">
+                                    <div class="rating rating-sm">
+                                        <input type="radio" name="{{ form.manageability.name }}" value="1" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.manageability.value == 1 or form.manageability.value == "1" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.manageability.name }}" value="2" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.manageability.value == 2 or form.manageability.value == "2" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.manageability.name }}" value="3" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.manageability.value == 3 or form.manageability.value == "3" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.manageability.name }}" value="4" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.manageability.value == 4 or form.manageability.value == "4" %}checked{% endif %} />
+                                        <input type="radio" name="{{ form.manageability.name }}" value="5" class="mask mask-star-2 bg-orange-400" 
+                                            {% if form.manageability.value == 5 or form.manageability.value == "5" %}checked{% endif %} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <div class="col-span-2">
+                        <label for="{{ form.title.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.title.label }}</label>
+                        {% if form.title.errors %}
+                            <div class="text-red-600 text-sm mb-1">{{ form.title.errors.0 }}</div>
+                        {% endif %}
+                        <input type="text" 
+                            name="{{ form.title.name }}" 
+                            id="{{ form.title.id_for_label }}" 
+                            value="{{ form.title.value|default:'' }}"
+                            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" 
+                            placeholder="Enter a title for your review" />
+                    </div>
+                    
+                    <!-- Review Description -->
+                    <div class="col-span-2">
+                        <label for="{{ form.text_review.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.text_review.label }}</label>
+                        {% if form.text_review.errors %}
+                            <div class="text-red-600 text-sm mb-1">{{ form.text_review.errors.0 }}</div>
+                        {% endif %}
+                        <textarea name="{{ form.text_review.name }}" 
+                                id="{{ form.text_review.id_for_label }}" 
+                                rows="6" 
+                                class="mb-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" 
+                                placeholder="Share your experience with this course...">{{ form.text_review.value|default:'' }}</textarea>
+                    </div>
+                    
+                    <!-- Course Completion -->
+                    <div class="col-span-1">
+                        <label for="{{ form.course_completion.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.course_completion.label }}</label>
+                        {% if form.course_completion.errors %}
+                            <div class="text-red-600 text-sm mb-1">{{ form.course_completion.errors.0 }}</div>
+                        {% endif %}
+                        <input type="text"
+                                name="{{ form.course_completion.name }}"
+                                id="{{ form.course_completion.id_for_label }}"
+                                value="{{ form.course_completion.value|default:'' }}"
+                            pattern="\d{4}-(AUTUMN|SPRING|SUMMER|WINTER)"
+                            title="Please enter in format: YYYY-SEASON (e.g., 2025-AUTUMN)"
+                            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                placeholder="2025-AUTUMN"
+                                required />
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Format: YYYY-SEASON (AUTUMN, SPRING, SUMMER, WINTER)</p>
+                    </div>
+                    
+                    <!-- Grade -->
+                    <div class="col-span-1">
+                        <label for="{{ form.grade.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.grade.label }} (Optional)</label>
+                        {% if form.grade.errors %}
+                            <div class="text-red-600 text-sm mb-1">{{ form.grade.errors.0 }}</div>
+                        {% endif %}
+                        <input type="number" 
+                            name="{{ form.grade.name }}" 
+                            id="{{ form.grade.id_for_label }}" 
+                            value="{{ form.grade.value|default:'' }}"
+                            min="0" max="100" 
+                            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" 
+                            placeholder="Enter your grade (0-100)" />
+                    </div>
+                    
+                    <!-- Anonymous checkbox -->
+                    <div class="col-span-2">
+                        <div class="flex items-center">
+                            <input type="checkbox" 
+                                name="{{ form.is_anonymous.name }}" 
+                                id="{{ form.is_anonymous.id_for_label }}" 
+                                {% if form.is_anonymous.value %}checked{% endif %}
+                                class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" />
+                            <label for="{{ form.is_anonymous.id_for_label }}" class="ms-2 text-sm font-medium text-gray-500 dark:text-gray-400">{{ form.is_anonymous.label }}</label>
+                        </div>
+                        {% if form.is_anonymous.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.is_anonymous.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="border-t border-gray-200 pt-4 dark:border-gray-700 md:pt-5">
+                    <button type="submit" class="me-2 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Submit Review
+                    </button>
+                    <button type="button" class="btn" onclick="contact_modal.close()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
