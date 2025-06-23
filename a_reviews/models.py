@@ -78,4 +78,6 @@ class Review(models.Model):
         super().delete(*args, **kwargs)
         course.update_ratings()  
     
+    class Meta:
+        unique_together = ['course', 'author']
 

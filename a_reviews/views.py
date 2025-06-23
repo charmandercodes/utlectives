@@ -16,13 +16,23 @@ def course_list(request):
 
 def course_details(request, code):
     course = get_object_or_404(Course, code=code)
-    reviews = course.review_set.all().order_by('-review_date')  # Get all reviews for this course
-    form = ReviewForm()  # Initialize the form for creating a new review
+    reviews = course.review_set.all().order_by('-review_date')
+    form = ReviewForm()
+    
+    # Check if the current user has already reviewed this course
+    user_review = None
+    if request.user.is_authenticated:
+        try:
+            user_review = Review.objects.get(course=course, author=request.user)
+        except Review.DoesNotExist:
+            user_review = None
     
     context = {
         'course': course,
         'reviews': reviews,
         'form': form,
+        'user_review': user_review,  # Pass this to the template
+        'is_update': user_review is not None,  # For the modal header
     }
     
     return render(request, 'a_reviews/detail.html', context)
