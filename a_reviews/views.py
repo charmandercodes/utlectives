@@ -78,9 +78,13 @@ def htmx_create_review(request, code):
         review.author = request.user
         review.save()
         
-        # Fix: Pass as a list
-        context = {'reviews': [review]}  # Put the review in a list
-        return render(request, 'a_reviews/detail_components/review.html', context)
+        # Create the response with the new review
+        context = {'reviews': [review]}
+        response = render(request, 'a_reviews/detail_components/review.html', context)
+        
+        # Add the HX-Trigger header to close the modal
+        response["HX-Trigger"] = "closeModal"
+        return response
     else:
         print(f"Form errors: {form.errors}")
         context = {
