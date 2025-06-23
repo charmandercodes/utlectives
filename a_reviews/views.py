@@ -103,3 +103,34 @@ def htmx_create_review(request, code):
             'is_update': False
         }
         return render(request, 'a_reviews/partials/review-modal.html', context)
+
+
+@login_required
+@require_http_methods(["GET"])
+def htmx_delete_review_modal(request, review_id):
+    """Load the delete confirmation modal with review details"""
+    review = get_object_or_404(Review, id=review_id, author=request.user)
+    
+    context = {
+        'review': review,
+    }
+    
+    return render(request, 'a_reviews/partials/delete-modal-content.html', context)
+
+@login_required
+@require_http_methods(["DELETE"])
+def htmx_delete_review(request, review_id):
+    """Handle the actual review deletion"""
+    review = get_object_or_404(Review, id=review_id, author=request.user)
+    
+    # Store the review ID for logging or response
+    deleted_review_id = review.id
+    
+    # Delete the review
+    review.delete()
+    
+    # Return an empty response (the review div will be removed)
+    response = HttpResponse('')
+    response.status_code = 200
+    
+    return response

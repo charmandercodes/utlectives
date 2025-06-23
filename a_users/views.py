@@ -9,18 +9,19 @@ from django.contrib.auth import logout
 from allauth.account.utils import send_email_confirmation
 # Create your views here.
 
-@login_required
+@login_required 
 def userView(request):
-    # get users reviews and feed to template
-
+    # Handle both GET and POST requests
+    if request.method == 'POST':
+        # If it's a POST request, redirect to GET (POST-Redirect-GET pattern)
+        return redirect('user-page')  # Replace with your actual URL name
+    
+    # GET request (normal page load)
     user_reviews = Review.objects.filter(author=request.user).select_related('course').order_by('-review_date')
-
     context = {
         'reviews': user_reviews,
         'reviews_count': user_reviews.count(),
     }
-
-
     return render(request, 'a_users/user.html', context)
 
 def termsView(request):
