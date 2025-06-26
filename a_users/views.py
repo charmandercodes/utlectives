@@ -18,6 +18,7 @@ def userView(request):
     
     # GET request (normal page load)
     user_reviews = Review.objects.filter(author=request.user).select_related('course').order_by('-review_date')
+    
     context = {
         'reviews': user_reviews,
         'reviews_count': user_reviews.count(),

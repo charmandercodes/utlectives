@@ -23,6 +23,9 @@
                     <p class="text-base font-semibold text-gray-900 dark:text-white"> {{review.author}} </p>
                 {% endif %}
                 <p class="text-sm font-normal text-gray-500 dark:text-gray-400"> {{ review.course_completion }}</p>
+                {% if show_edit_buttons and review.course %}
+                    <p class="text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-md"> {{ review.course.code }} - {{ review.course.name }} </p>
+                {% endif %}
             </div>
         </div>
 
@@ -86,16 +89,11 @@
         {% if show_edit_buttons %}
         <div class="absolute top-2 right-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 px-3 py-1">
             <div class="flex space-x-2 text-xs">
-                
-                <a href="{% url 'update-review' review.id %}"
-                   class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
-                    Edit
-                </a>
                 <button 
-                    hx-get="{% url 'htmx-delete-review-modal' review.id %}"
-                    hx-target="#delete_modal .modal-box"
+                    hx-get="{% url 'htmx-update-review-modal' review.id %}"
+                    hx-target="#edit_modal .modal-box"
                     hx-swap="innerHTML"
-                    hx-on::after-request="delete_modal.showModal()"
+                    hx-on::after-request="edit_modal.showModal()" 
                     class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium"">
                     Edit
                 </button>

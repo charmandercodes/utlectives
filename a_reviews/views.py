@@ -134,3 +134,50 @@ def htmx_delete_review(request, review_id):
     response.status_code = 200
     
     return response
+
+@login_required
+@require_http_methods(["GET"])
+def htmx_update_review_modal(request, review_id):
+    review = get_object_or_404(Review, id=review_id, author=request.user)
+    form = ReviewForm(instance=review)
+    
+    context = {
+        'form': form,
+        'review': review,
+        'course': review.course,  # ✅ Add the course object
+        'is_update': True
+    }
+    
+    return render(request, 'a_reviews/partials/edit-modal-content.html', context)
+
+@login_required
+@require_http_methods(["PUT", "POST"])
+def htmx_update_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, author=request.user)
+    
+    # Handle PUT requests properly - this was the key fix
+    if request.method == "PUT":
+        from django.http import QueryDict
+        put_data = QueryDict(request.body)
+        form = ReviewForm(put_data, instance=review)
+    else:
+        form = ReviewForm(request.POST, instance=review)
+    
+    if form.is_valid():
+        updated_review = form.save()
+        # Return updated review HTML - pass as list like in create view
+        context = {'reviews': [updated_review], 'show_edit_buttons': True }
+        response = render(request, 'a_reviews/detail_components/review.html', context)
+        
+        # Add HX-Trigger to close the modal
+        response["HX-Trigger"] = "closeEditModal"
+        return response
+    else:
+        # Include course context when form is invalid
+        context = {
+            'review': review,
+            'course': review.course,
+            'form': form,
+            'is_update': True
+        }
+        return render(request, 'a_reviews/partials/edit-modal-content.html', context)
