@@ -12,4 +12,5 @@ urlpatterns = [
     path('htmx/delete-review/<int:review_id>/', htmx_delete_review, name='htmx-delete-review'),
     path('htmx/update-review-modal/<int:review_id>/', htmx_update_review_modal, name='htmx-update-review-modal'),
     path('htmx/update-review/<int:review_id>/', htmx_update_review, name='htmx-update-review'),
+    path('course/<str:course_code>/header/', refresh_course_header, name='refresh-course-header'),
 ]

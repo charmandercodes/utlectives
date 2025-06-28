@@ -163,7 +163,9 @@
         
         <!-- Form Actions -->
         <div class="border-t border-gray-200 pt-4 dark:border-gray-700 md:pt-5">
-            <button type="submit" class="me-2 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <button 
+                type="submit" 
+                class="inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Submit Review
             </button>
             <a href="{% if is_update %}{% url 'user-page' %}{% else %}{% url 'course-detail' course.code %}{% endif %}" 

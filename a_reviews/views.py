@@ -155,7 +155,6 @@ def htmx_update_review_modal(request, review_id):
 def htmx_update_review(request, review_id):
     review = get_object_or_404(Review, id=review_id, author=request.user)
     
-    # Handle PUT requests properly - this was the key fix
     if request.method == "PUT":
         from django.http import QueryDict
         put_data = QueryDict(request.body)
@@ -165,15 +164,26 @@ def htmx_update_review(request, review_id):
     
     if form.is_valid():
         updated_review = form.save()
-        # Return updated review HTML - pass as list like in create view
-        context = {'reviews': [updated_review], 'show_edit_buttons': True }
-        response = render(request, 'a_reviews/detail_components/review.html', context)
         
-        # Add HX-Trigger to close the modal
-        response["HX-Trigger"] = "closeEditModal"
+        # Check if user now has a review (they should after saving)
+        user_review = updated_review  # Since they just updated their review
+        
+        # Pass ALL needed context for both review AND header
+        context = {
+            'reviews': [updated_review], 
+            'show_edit_buttons': True,
+            'course': updated_review.course,  # Add course for header
+            'user_review': user_review,       # Add user_review for header logic
+        }
+        response = render(request, 'a_reviews/oob/update_response.html', context)
+        
+        # Fix the trigger issue - use JSON for multiple triggers
+        import json
+        response["HX-Trigger"] = json.dumps({
+            "closeEditModal": {},
+        })
         return response
     else:
-        # Include course context when form is invalid
         context = {
             'review': review,
             'course': review.course,
@@ -181,3 +191,20 @@ def htmx_update_review(request, review_id):
             'is_update': True
         }
         return render(request, 'a_reviews/partials/edit-modal-content.html', context)
+    
+
+
+def refresh_course_header(request, course_code):
+    course = get_object_or_404(Course, code=course_code)
+    user_review = None
+    if request.user.is_authenticated:
+        try:
+            user_review = Review.objects.get(course=course, author=request.user)
+        except Review.DoesNotExist:
+            pass
+    
+    context = {
+        'course': course,
+        'user_review': user_review,
+    }
+    return render(request, 'a_reviews/detail_components/review_header.html', context)
