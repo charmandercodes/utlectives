@@ -38,38 +38,49 @@ def course_details(request, code):
     return render(request, 'a_reviews/detail.html', context)
 
 
-def search_courses(request):
-    query = request.GET.get('search', '')
+# deprecated search function
+# def search_courses(request):
+#     query = request.GET.get('search', '')
 
-    courses = Course.objects.filter(
-        Q(name__icontains=query)
-    )
+#     courses = Course.objects.filter(
+#         Q(name__icontains=query)
+#     )
 
-    return render(request, 'a_reviews/course_list.html', {'courses': courses})
+#     return render(request, 'a_reviews/course_list.html', {'courses': courses})
 
 
 def filter_courses(request):
+    # Get search query
+    search_query = request.GET.get('search', '')
+    
+    # Get filter parameters
     selected_faculties = request.GET.getlist('faculty')
     selected_sessions = request.GET.getlist('session')
     
+    print(f"Search query: '{search_query}'")
     print(f"Selected sessions: {selected_sessions}")
     print(f"Selected faculties: {selected_faculties}")
     
+    # Start with all courses
     courses = Course.objects.all()
     
+    # Apply filters FIRST (this creates the "context")
     if selected_faculties:
         courses = courses.filter(faculty__in=selected_faculties)
+        print(f"After faculty filter: {courses.count()} courses")
     
     if selected_sessions:
-        # Try a different approach - filter in Python
         course_ids = []
         for course in courses:
-            print(f"Course {course.name} sessions: {course.sessions}")  # Debug each course
             if any(session in course.sessions for session in selected_sessions):
                 course_ids.append(course.id)
-                print(f"  -> Match found for {course.name}")
-        
         courses = Course.objects.filter(id__in=course_ids)
+        print(f"After session filter: {courses.count()} courses")
+    
+    # Apply search WITHIN the filtered results
+    if search_query:
+        courses = courses.filter(Q(name__icontains=search_query))
+        print(f"After search within filters: {courses.count()} courses")
     
     print(f"Final course count: {courses.count()}")
     return render(request, 'a_reviews/course_list.html', {'courses': courses})
