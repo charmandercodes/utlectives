@@ -38,7 +38,6 @@ def course_details(request, code):
     return render(request, 'a_reviews/detail.html', context)
 
 
-@login_required
 def search_courses(request):
     query = request.GET.get('search', '')
 
@@ -46,6 +45,33 @@ def search_courses(request):
         Q(name__icontains=query)
     )
 
+    return render(request, 'a_reviews/course_list.html', {'courses': courses})
+
+
+def filter_courses(request):
+    selected_faculties = request.GET.getlist('faculty')
+    selected_sessions = request.GET.getlist('session')
+    
+    print(f"Selected sessions: {selected_sessions}")
+    print(f"Selected faculties: {selected_faculties}")
+    
+    courses = Course.objects.all()
+    
+    if selected_faculties:
+        courses = courses.filter(faculty__in=selected_faculties)
+    
+    if selected_sessions:
+        # Try a different approach - filter in Python
+        course_ids = []
+        for course in courses:
+            print(f"Course {course.name} sessions: {course.sessions}")  # Debug each course
+            if any(session in course.sessions for session in selected_sessions):
+                course_ids.append(course.id)
+                print(f"  -> Match found for {course.name}")
+        
+        courses = Course.objects.filter(id__in=course_ids)
+    
+    print(f"Final course count: {courses.count()}")
     return render(request, 'a_reviews/course_list.html', {'courses': courses})
 
 @login_required
