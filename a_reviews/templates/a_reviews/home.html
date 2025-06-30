@@ -37,13 +37,40 @@
                         </svg>
                     </div>
                     <!-- Rest of your buttons stay the same -->
-                    <button class="flex items-center gap-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-                        Sort By
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-                    
+                    <div class="dropdown">
+                        <div tabindex="0" role="button" class="flex items-center gap-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            <span id="sort-text">Sort By</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                            <li><a onclick="setSortOption('Alphabetical (A-Z)', 'name')" 
+                                   hx-get="{% url 'filter_courses' %}?sort=name" 
+                                   hx-target="#course-list" 
+                                   hx-include="input[name='search'], #filter-form">Alphabetical (A-Z)</a></li>
+                            <li><a onclick="setSortOption('Alphabetical (Z-A)', '-name')" 
+                                   hx-get="{% url 'filter_courses' %}?sort=-name" 
+                                   hx-target="#course-list" 
+                                   hx-include="input[name='search'], #filter-form">Alphabetical (Z-A)</a></li>
+                            <li><a onclick="setSortOption('Overall Rating', '-overall_rating')" 
+                                   hx-get="{% url 'filter_courses' %}?sort=-overall_rating" 
+                                   hx-target="#course-list" 
+                                   hx-include="input[name='search'], #filter-form">Overall Rating</a></li>
+                            <li><a onclick="setSortOption('Enjoyability', '-enjoyment')" 
+                                   hx-get="{% url 'filter_courses' %}?sort=-enjoyment" 
+                                   hx-target="#course-list" 
+                                   hx-include="input[name='search'], #filter-form">Enjoyability</a></li>
+                            <li><a onclick="setSortOption('Usefulness', '-usefullness')" 
+                                   hx-get="{% url 'filter_courses' %}?sort=-usefullness" 
+                                   hx-target="#course-list" 
+                                   hx-include="input[name='search'], #filter-form">Usefulness</a></li>
+                            <li><a onclick="setSortOption('Manageability', '-manageability')" 
+                                   hx-get="{% url 'filter_courses' %}?sort=-manageability" 
+                                   hx-target="#course-list" 
+                                   hx-include="input[name='search'], #filter-form">Manageability</a></li>
+                        </ul>
+                    </div>
                     <button onclick="filter_modal.showModal()" class="flex items-center gap-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
                         Filter
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -61,4 +88,17 @@
     </div>
 </div>
 
+
+<script>
+    function setSortOption(displayText, sortValue) {
+    // Update the button text
+    document.getElementById('sort-text').textContent = displayText;
+    
+    // Close the dropdown
+    document.activeElement.blur();
+}
+</script>
+
 {% endblock %}
+
+

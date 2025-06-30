@@ -50,24 +50,20 @@ def course_details(request, code):
 
 
 def filter_courses(request):
-    # Get search query
+    # Get all parameters
     search_query = request.GET.get('search', '')
-    
-    # Get filter parameters
     selected_faculties = request.GET.getlist('faculty')
     selected_sessions = request.GET.getlist('session')
+    sort_by = request.GET.get('sort', '')  # Add this
     
-    print(f"Search query: '{search_query}'")
-    print(f"Selected sessions: {selected_sessions}")
-    print(f"Selected faculties: {selected_faculties}")
+    print(f"Sort by: {sort_by}")
     
-    # Start with all courses
+    # Your existing filter logic...
     courses = Course.objects.all()
     
-    # Apply filters FIRST (this creates the "context")
+    # Apply filters and search as before...
     if selected_faculties:
         courses = courses.filter(faculty__in=selected_faculties)
-        print(f"After faculty filter: {courses.count()} courses")
     
     if selected_sessions:
         course_ids = []
@@ -75,14 +71,16 @@ def filter_courses(request):
             if any(session in course.sessions for session in selected_sessions):
                 course_ids.append(course.id)
         courses = Course.objects.filter(id__in=course_ids)
-        print(f"After session filter: {courses.count()} courses")
     
-    # Apply search WITHIN the filtered results
     if search_query:
         courses = courses.filter(Q(name__icontains=search_query))
-        print(f"After search within filters: {courses.count()} courses")
     
-    print(f"Final course count: {courses.count()}")
+    # Apply sorting
+    if sort_by:
+        courses = courses.order_by(sort_by)
+    else:
+        courses = courses.order_by('name')  # Default sorting
+    
     return render(request, 'a_reviews/course_list.html', {'courses': courses})
 
 @login_required
