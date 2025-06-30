@@ -38,7 +38,7 @@ def course_details(request, code):
     return render(request, 'a_reviews/detail.html', context)
 
 
-# deprecated search function
+# deprecated search
 # def search_courses(request):
 #     query = request.GET.get('search', '')
 
@@ -50,20 +50,24 @@ def course_details(request, code):
 
 
 def filter_courses(request):
-    # Get all parameters
+    # Get search query
     search_query = request.GET.get('search', '')
+    
+    # Get filter parameters
     selected_faculties = request.GET.getlist('faculty')
     selected_sessions = request.GET.getlist('session')
-    sort_by = request.GET.get('sort', '')  # Add this
     
-    print(f"Sort by: {sort_by}")
+    print(f"Search query: '{search_query}'")
+    print(f"Selected sessions: {selected_sessions}")
+    print(f"Selected faculties: {selected_faculties}")
     
-    # Your existing filter logic...
+    # Start with all courses
     courses = Course.objects.all()
     
-    # Apply filters and search as before...
+    # Apply filters FIRST (this creates the "context")
     if selected_faculties:
         courses = courses.filter(faculty__in=selected_faculties)
+        print(f"After faculty filter: {courses.count()} courses")
     
     if selected_sessions:
         course_ids = []
@@ -71,16 +75,14 @@ def filter_courses(request):
             if any(session in course.sessions for session in selected_sessions):
                 course_ids.append(course.id)
         courses = Course.objects.filter(id__in=course_ids)
+        print(f"After session filter: {courses.count()} courses")
     
+    # Apply search WITHIN the filtered results
     if search_query:
         courses = courses.filter(Q(name__icontains=search_query))
+        print(f"After search within filters: {courses.count()} courses")
     
-    # Apply sorting
-    if sort_by:
-        courses = courses.order_by(sort_by)
-    else:
-        courses = courses.order_by('name')  # Default sorting
-    
+    print(f"Final course count: {courses.count()}")
     return render(request, 'a_reviews/course_list.html', {'courses': courses})
 
 @login_required
@@ -137,7 +139,13 @@ def htmx_create_review(request, code):
             'course': course,
             'is_update': False
         }
-        return render(request, 'a_reviews/partials/review-modal.html', context)
+        response = render(request, 'a_reviews/partials/review-modal.html', context)
+        response['HX-Retarget'] = "#contact_modal"
+        response["HX-Reswap"] = "outerHTML"
+        response["HX-Trigger-After-Settle"] = 'fail'
+        return response
+
+
 
 
 @login_required

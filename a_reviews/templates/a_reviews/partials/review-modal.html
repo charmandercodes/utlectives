@@ -1,8 +1,12 @@
 
 <dialog id="contact_modal" class="modal">
-    <div class="modal-box w-11/12 max-w-2xl bg-transparent">
+    <div id="modal-content-wrapper" class="modal-box w-11/12 max-w-2xl bg-transparent">
         <!-- Modal content -->
         <div class="relative rounded-lg bg-white shadow dark:bg-gray-800">
+            <div class="relative rounded-lg bg-white shadow dark:bg-gray-800">
+                <div class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-700 md:p-5">
+                </div>
+            </div>
             <!-- Modal header -->
             <div class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-700 md:p-5">
                 <div>
@@ -14,14 +18,14 @@
             </div>
             
             <!-- Show form errors at the top if any -->
-            {% if form.errors %}
+            {% if errors %}
             <div class="p-4 bg-red-50 border-l-4 border-red-400">
                 <div class="flex">
                     <div class="ml-3">
                         <h3 class="text-sm font-medium text-red-800">Please fix the following errors:</h3>
                         <div class="mt-2 text-sm text-red-700">
                             <ul class="list-disc pl-5 space-y-1">
-                                {% for field, errors in form.errors.items %}
+                                {% for field, errors in errors.items %}
                                     {% for error in errors %}
                                         <li><strong>{{ field }}:</strong> {{ error }}</li>
                                     {% endfor %}
