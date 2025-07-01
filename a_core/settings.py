@@ -185,3 +185,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For developm
 ACCOUNT_FORMS = {
     'signup': 'a_users.forms.CustomSignupForm',  # Replace 'your_app_name' with your actual app name
 }
+
+
+PAGE_SIZE = 2

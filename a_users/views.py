@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from a_reviews.forms import ReviewForm
 from django.contrib.auth import logout
 from allauth.account.utils import send_email_confirmation
+from django.views.decorators.http import require_POST
 # Create your views here.
 
 @login_required 
@@ -121,3 +122,20 @@ def delete_account(request):
 
 
 
+
+from allauth.account.models import EmailAddress
+
+@login_required
+@require_POST
+def resend_verification_email(request):
+    try:
+        email_record = EmailAddress.objects.filter(user=request.user).first()
+        if email_record and email_record.verified:
+            messages.info(request, "Your email is already verified.")
+        else:
+            send_email_confirmation(request, request.user)
+            messages.success(request, 'Verification email sent successfully! Please check your inbox.')
+    except Exception as e:
+        messages.error(request, 'Failed to send verification email. Please try again later.')
+    
+    return redirect(request.META.get('HTTP_REFERER', '/'))

@@ -5,6 +5,11 @@ from a_reviews.forms import ReviewForm
 from a_reviews.models import Course, Review
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.core.paginator import Paginator
+from django.conf import settings
+
+
+
 # Create your views here.
 
 import logging
@@ -12,7 +17,9 @@ logger = logging.getLogger(__name__)
 
 def course_list(request):
     courses = Course.objects.all()
-    return render(request, 'a_reviews/home.html', {'courses': courses})
+    paginator = Paginator(courses, settings.PAGE_SIZE)
+    course_page = paginator.page(1)
+    return render(request, 'a_reviews/home.html', {'courses': course_page})
 
 def course_details(request, code):
     course = get_object_or_404(Course, code=code)
@@ -48,7 +55,6 @@ def course_details(request, code):
 
 #     return render(request, 'a_reviews/course_list.html', {'courses': courses})
 
-
 def filter_courses(request):
     # Get search query
     search_query = request.GET.get('search', '')
@@ -57,14 +63,31 @@ def filter_courses(request):
     selected_faculties = request.GET.getlist('faculty')
     selected_sessions = request.GET.getlist('session')
     
+    # Get sort parameter
+    sort_by = request.GET.get('sort', 'code')
+    
+    # Get page parameter - handle duplicates properly
+    page_list = request.GET.getlist('page')
+    if page_list:
+        # Take the highest page number (most recent)
+        try:
+            page_number = max(int(p) for p in page_list if p.isdigit())
+        except:
+            page_number = 1
+    else:
+        page_number = 1
+    
     print(f"Search query: '{search_query}'")
     print(f"Selected sessions: {selected_sessions}")
     print(f"Selected faculties: {selected_faculties}")
+    print(f"Sort by: '{sort_by}'")
+    print(f"Page list from URL: {page_list}")
+    print(f"Resolved page number: {page_number}")
     
     # Start with all courses
     courses = Course.objects.all()
     
-    # Apply filters FIRST (this creates the "context")
+    # Apply filters FIRST
     if selected_faculties:
         courses = courses.filter(faculty__in=selected_faculties)
         print(f"After faculty filter: {courses.count()} courses")
@@ -82,8 +105,27 @@ def filter_courses(request):
         courses = courses.filter(Q(name__icontains=search_query))
         print(f"After search within filters: {courses.count()} courses")
     
+    # Apply sorting
+    if sort_by:
+        try:
+            courses = courses.order_by(sort_by)
+            print(f"Applied sorting: {sort_by}")
+        except Exception as e:
+            print(f"Sorting error: {e}")
+            courses = courses.order_by('code')
+    
+    # Apply pagination
+    paginator = Paginator(courses, settings.PAGE_SIZE)
+    try:
+        course_page = paginator.page(page_number)  # Use the page_number from request
+    except:
+        course_page = paginator.page(1)  # Fallback to page 1
+    
     print(f"Final course count: {courses.count()}")
-    return render(request, 'a_reviews/course_list.html', {'courses': courses})
+    print(f"Showing page {page_number} of {paginator.num_pages}")
+    print(f"Courses on this page: {[course.code for course in course_page]}")
+    
+    return render(request, 'a_reviews/course_list.html', {'courses': course_page})
 
 @login_required
 def review_create_view(request, code):  # Accept course code parameter
@@ -251,3 +293,15 @@ def refresh_course_header(request, course_code):
         'user_review': user_review,
     }
     return render(request, 'a_reviews/detail_components/review_header.html', context)
+
+
+def get_courses(request):
+    page = request.GET.get('page', 1)
+    courses = Course.objects.all()
+    paginator = Paginator(courses, settings.PAGE_SIZE)
+    context = {
+        'courses': paginator.page(page)
+    }
+    return render(request, 'a_reviews/course_list.html', context)
+
+
