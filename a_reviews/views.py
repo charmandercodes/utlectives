@@ -167,11 +167,21 @@ def htmx_create_review(request, code):
         review.author = request.user
         review.save()
         
-        # Create the response with the new review
-        context = {'reviews': [review]}
-        response = render(request, 'a_reviews/detail_components/review.html', context)
+        # Update course ratings after new review
+        course.update_ratings()
         
-        # Add the HX-Trigger header to close the modal
+        # Prepare context for both the new review AND the updated header
+        user_review = review  # User now has a review
+        context = {
+            'reviews': [review],
+            'course': course,  # Updated course with new ratings
+            'user_review': user_review,  # For header logic
+        }
+        
+        # This template will render both the review AND the header
+        response = render(request, 'a_reviews/detail_components/review_with_header.html', context)
+        
+        # Close modal
         response["HX-Trigger"] = "closeModal"
         return response
     else:
