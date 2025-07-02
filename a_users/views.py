@@ -8,6 +8,7 @@ from a_reviews.forms import ReviewForm
 from django.contrib.auth import logout
 from allauth.account.utils import send_email_confirmation
 from django.views.decorators.http import require_POST
+from allauth.account.forms import ChangePasswordForm
 # Create your views here.
 
 @login_required 
@@ -139,3 +140,20 @@ def resend_verification_email(request):
         messages.error(request, 'Failed to send verification email. Please try again later.')
     
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required
+def change_password_inline(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Password changed successfully!')
+        else:
+            # Add form errors to messages
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    
+    # Redirect back to account settings
+    return redirect('user-page') 
