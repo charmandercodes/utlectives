@@ -149,14 +149,22 @@ def change_password_inline(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Password changed successfully!')
+            # Return success state - back to display mode
+            return render(request, 'a_users/partials/change-password.html', {'form': None})
         else:
-            # Add form errors to messages
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-            
-            return render('user-page#')
-            
+            # Return the form with errors in edit mode
+            return render(request, 'a_users/partials/change-password.html', {
+                'form': form,
+                'show_edited': True,  # Flag to show edit mode
+                'hide': True  # Flag to hide display mode
+            })
     
-    # Redirect back to account settings
-    return redirect('user-page') 
+    # For GET requests, return the partial template
+    
+    form = ChangePasswordForm(user=request.user)
+
+    context = {
+        'form': form,
+        'hide': False,  # Flag to show display mode
+    }
+    return render(request, 'a_users/partials/change-password.html', context)
