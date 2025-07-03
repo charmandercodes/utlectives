@@ -27,6 +27,7 @@ urlpatterns = [
     path('users/', include('a_users.urls')),
     path('reviews/', include('a_reviews.urls')),
     path('accounts/', include('allauth.urls')),
+    path('silk/', include('silk.urls', namespace='silk'))
 ]
 # Note: This assumes you have a URL named 'home' in your a_reviews.urls with namespace 'reviews'
 # If your reviews URLs don't use a namespace, just use pattern_name='home' or whatever the URL name is

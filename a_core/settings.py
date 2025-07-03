@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "a_reviews",
     'allauth',
     'allauth.account',
+    "template_partials",
+    'silk'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +55,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "silk.middleware.SilkyMiddleware"
 ]
 
 ROOT_URLCONF = "a_core.urls"

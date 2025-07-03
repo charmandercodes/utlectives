@@ -154,6 +154,9 @@ def change_password_inline(request):
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"{field}: {error}")
+            
+            return render('user-page#')
+            
     
     # Redirect back to account settings
     return redirect('user-page') 

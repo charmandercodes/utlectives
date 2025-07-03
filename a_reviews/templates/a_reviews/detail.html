@@ -1,42 +1,34 @@
 {% extends 'base.html' %}
-
 {% block title %}{{ course.name }} - {{ course.code }}{% endblock %}
-
 {% block content %}
 <div class="p-4 ml-16">
     <div class="p-4 rounded-lg dark:border-gray-700 mt-8">
-
-        {% include 'a_reviews/detail_components/header.html' %}
-
-        {% include 'a_reviews/detail_components/description.html' %}
-
-        <!-- Review Section -->
-         <div class="rounded-lg p-6 shadow-sm mt-3">
-            <h2 class="text-3xl font-bold font-sans text-gray-900 dark:text-white">Reviews</h2>
-            <section class="bg-white py-8 antialiased dark:bg-gray-900">
-                <div class="mx-auto max-w-screen-xl 2xl:px-0">
-                  
-                  <!-- review  header  -->
-                  
-                  {% include 'a_reviews/detail_components/review_header.html' %}
-
-                  <!-- review bars -->
-
-                  {% include 'a_reviews/detail_components/review_bars.html' %}
-                  
-                  <!-- parent div for individual summaries -->
-                  <div class="mt-6 divide-y divide-gray-200 dark:divide-gray-700" id="review-list">
+        
+        <!-- Consistent container for all sections -->
+        <div class="mx-auto max-w-screen-xl 2xl:max-w-6xl">
+            {% include 'a_reviews/detail_components/header.html' %}
+            {% include 'a_reviews/detail_components/description.html' %}
+            
+            <!-- Review Section -->
+            <div class="rounded-lg p-6 shadow-sm mt-3">
+                <h2 class="text-3xl font-bold font-sans text-gray-900 dark:text-white">Reviews</h2>
+                <!-- review header -->
+                {% include 'a_reviews/detail_components/review_header.html' %}
+                <!-- review bars -->
+                {% include 'a_reviews/detail_components/review_bars.html' %}
+                <!-- parent div for individual summaries -->
+                <div class="mt-6 divide-y divide-gray-200 dark:divide-gray-700" id="review-list">
                     {% include 'a_reviews/detail_components/review.html' %}
-                  </div>
                 </div>
-              </section>
+            </div>
         </div>
+        
         {% include 'a_reviews/partials/review-modal.html' %}
     </div>
 </div>
 
 <script>
-      document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
         document.body.addEventListener('fail', () => {
             document.getElementById('contact_modal').showModal();
         })
