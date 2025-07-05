@@ -11,7 +11,7 @@
                 </svg>
             </button>
         </div>
-        
+
         <!-- Modal body -->
         <form id="filter-form" class="py-6 space-y-6">
             <div>
@@ -80,12 +80,12 @@
                 </div>
             </div>
         </form>
-        
+
         <!-- Modal footer -->
         <div class="modal-action border-t border-gray-200 dark:border-gray-600 pt-4">
             <button type="button" onclick="clearFilters()" class="btn btn-outline">Clear All</button>
-            <button type="button" 
-                    onclick="applyFilters()" 
+            <button type="button"
+                    onclick="applyFilters()"
                     class="btn btn-primary"
                     hx-get="{% url 'filter_courses' %}"
                     hx-target="#course-list"
@@ -95,7 +95,7 @@
             </button>
         </div>
     </div>
-    
+
     <form method="dialog" class="modal-backdrop">
         <button>close</button>
     </form>

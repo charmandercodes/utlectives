@@ -1,30 +1,30 @@
 <div
-    id="course-header" 
+    id="course-header"
     class="flex items-center mb-5">
-  <p class="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded-sm dark:bg-blue-200 dark:text-blue-800">{{ course.overall_rating }} / 5</p>
-  <span class="w-1 h-1 mx-2 bg-gray-900 rounded-full dark:bg-gray-500"></span>
-  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ course.total_reviews }} reviews</p>
-  
-  {% if user.is_authenticated %}
-      {% if user_review %}
+    <p class="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded-sm dark:bg-blue-200 dark:text-blue-800">{{ course.overall_rating }} / 5</p>
+    <span class="w-1 h-1 mx-2 bg-gray-900 rounded-full dark:bg-gray-500"></span>
+    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ course.total_reviews }} reviews</p>
+
+    {% if user.is_authenticated %}
+        {% if user_review %}
           <!-- User has already reviewed - show edit button -->
-          <a href="{% url 'user-page' %}" class="ms-auto">
-            <button class="btn btn-primary mb-4 ms-auto" onclick="contact_modal.showModal()">
-              Your Reviews
-            </button>
-          </a>
-      {% else %}
+            <a href="{% url 'user-page' %}" class="ms-auto">
+                <button class="btn btn-primary mb-4 ms-auto" onclick="contact_modal.showModal()">
+                    Your Reviews
+                </button>
+            </a>
+        {% else %}
           <!-- User hasn't reviewed yet - show write review button -->
-          <button class="btn btn-primary mb-4 ms-auto" onclick="contact_modal.showModal()">
-              Write a Review
-          </button>
-      {% endif %}
-  {% else %}
+            <button class="btn btn-primary mb-4 ms-auto" onclick="contact_modal.showModal()">
+                Write a Review
+            </button>
+        {% endif %}
+    {% else %}
       <!-- User not logged in -->
-      <a href="{% url 'account_login' %}" class="ms-auto">
-          <button type="button" class="mb-2 me-2 rounded-lg bg-orange-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">
-              Login To Write a Review
-          </button>
-      </a>
-  {% endif %}
+        <a href="{% url 'account_login' %}" class="ms-auto">
+            <button type="button" class="mb-2 me-2 rounded-lg bg-orange-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">
+                Login To Write a Review
+            </button>
+        </a>
+    {% endif %}
 </div>

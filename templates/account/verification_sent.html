@@ -5,62 +5,62 @@
 
 {% block content %}
 
-<section class="mb-96 bg-gray-50 dark:bg-gray-900 min-h-screen">
-    <div class="flex flex-col items-center justify-start px-6 pt-16 pb-8 mx-auto lg:pt-20">
-        <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div class="p-6 space-y-4 md:space-y-6 sm:p-8 text-center">
+    <section class="mb-96 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div class="flex flex-col items-center justify-start px-6 pt-16 pb-8 mx-auto lg:pt-20">
+            <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8 text-center">
                 <!-- Warning Icon -->
-                <div class="flex justify-center">
-                    <div class="flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full dark:bg-yellow-900">
-                        <svg class="w-8 h-8 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"></path>
-                        </svg>
-                    </div>
-                </div>
-
-                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                    Email Verification Required
-                </h1>
-                
-                <div class="space-y-4">
-                    <p class="text-gray-600 dark:text-gray-400">
-                        Check your email for a verification link, or request a new one below.
-                    </p>
-                    
-                    <!-- Display messages -->
-                    {% if messages %}
-                        {% for message in messages %}
-                        <div class="p-4 mb-4 text-sm rounded-lg {% if message.tags == 'success' %}text-green-800 bg-green-50 dark:bg-gray-800 dark:text-green-400{% elif message.tags == 'error' %}text-red-800 bg-red-50 dark:bg-gray-800 dark:text-red-400{% endif %}">
-                            {{ message }}
+                    <div class="flex justify-center">
+                        <div class="flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full dark:bg-yellow-900">
+                            <svg class="w-8 h-8 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
                         </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                    </div>
+
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                        Email Verification Required
+                    </h1>
+
+                    <div class="space-y-4">
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Check your email for a verification link, or request a new one below.
+                        </p>
+
+                    <!-- Display messages -->
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="p-4 mb-4 text-sm rounded-lg {% if message.tags == 'success' %}text-green-800 bg-green-50 dark:bg-gray-800 dark:text-green-400{% elif message.tags == 'error' %}text-red-800 bg-red-50 dark:bg-gray-800 dark:text-red-400{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
 
                 <!-- Send verification email -->
-                <form method="post" action="{% url 'resend_verification' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-200">
-                        Send New Verification Email
-                    </button>
-                </form>
+                    <form method="post" action="{% url 'resend_verification' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-200">
+                            Send New Verification Email
+                        </button>
+                    </form>
 
                 <!-- Help text -->
-                <div class="pt-4 border-t border-gray-200 dark:border-gray-600">
-                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                        Only verified UTS students can write and edit course reviews. 
-                        This helps maintain the quality and authenticity of our review system.
-                    </p>
-                </div>
+                    <div class="pt-4 border-t border-gray-200 dark:border-gray-600">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            Only verified UTS students can write and edit course reviews.
+                            This helps maintain the quality and authenticity of our review system.
+                        </p>
+                    </div>
 
                 <!-- Back link -->
-                <div class="pt-2">
-                    <a href="{% url 'account_logout' %}" class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300">
-                        ← Sign out
-                    </a>
+                    <div class="pt-2">
+                        <a href="{% url 'account_logout' %}" class="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300">
+                            ← Sign out
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 {% endblock %}

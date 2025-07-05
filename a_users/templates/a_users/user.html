@@ -2,54 +2,54 @@
 {% load i18n %}
 {% load partials %}
 {% block title %}
-User Page
+    User Page
 {% endblock %}
 
 {% block content %}
-<div class="p-4 ml-16">
+    <div class="p-4 ml-16">
     <!-- if user is authenticated -->
-    {% if user.is_authenticated %}
-        <div class="p-4 rounded-lg dark:border-gray-700 mt-8">
+        {% if user.is_authenticated %}
+            <div class="p-4 rounded-lg dark:border-gray-700 mt-8">
             <!-- Default homepage content -->
-            <div class="flex flex-col items-left justify-center h-48 mb-4 rounded-sm bg-gray-50 dark:bg-gray-900 dark:text-white">
-                <p class="mb-4">&nbsp;</p>
-                <h1 class="mb-4 text-7xl font-bold font-sans text-white">Welcome<span class="text-orange-500"> {{ user }}</span></h1>
-                <p>Manage your account and reviews here</p>
-            </div>
+                <div class="flex flex-col items-left justify-center h-48 mb-4 rounded-sm bg-gray-50 dark:bg-gray-900 dark:text-white">
+                    <p class="mb-4">&nbsp;</p>
+                    <h1 class="mb-4 text-7xl font-bold font-sans text-white">Welcome<span class="text-orange-500"> {{ user }}</span></h1>
+                    <p>Manage your account and reviews here</p>
+                </div>
 
             <!-- Tab System -->
-            <div x-data="{ activeTab: 'reviews' }" class="mb-4">
+                <div x-data="{ activeTab: 'reviews' }" class="mb-4">
                 <!-- Tab Navigation -->
-                <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
-                    <nav class="-mb-px flex space-x-8">
-                        <button 
-                            @click="activeTab = 'reviews'"
-                            :class="activeTab === 'reviews' ? 'border-orange-500 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
-                            class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
-                            Reviews
-                        </button>
-                        <button 
-                            @click="activeTab = 'account'"
-                            :class="activeTab === 'account' ? 'border-orange-500 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
-                            class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
-                            Account
-                        </button>
-                    </nav>
-                </div>
+                    <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
+                        <nav class="-mb-px flex space-x-8">
+                            <button
+                                @click="activeTab = 'reviews'"
+                                :class="activeTab === 'reviews' ? 'border-orange-500 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                                class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                                Reviews
+                            </button>
+                            <button
+                                @click="activeTab = 'account'"
+                                :class="activeTab === 'account' ? 'border-orange-500 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                                class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                                Account
+                            </button>
+                        </nav>
+                    </div>
                 <!-- Tab Content -->
-                <div class="mt-4">
+                    <div class="mt-4">
                     <!-- Account Tab Content -->
-                    {% include 'a_users/account.html' %}
+                        {% include 'a_users/account.html' %}
                     <!-- Reviews Tab Content -->
-                    {% include 'a_users/reviews.html' %}
-                    {% include 'a_reviews/partials/delete-modal.html' %}
-                    {% include 'a_reviews/partials/edit-modal.html' %}
+                        {% include 'a_users/reviews.html' %}
+                        {% include 'a_reviews/partials/delete-modal.html' %}
+                        {% include 'a_reviews/partials/edit-modal.html' %}
+                    </div>
                 </div>
             </div>
-        </div>
-    {% else %}
-        <h1 class="text-3xl font-bold mb-4">Welcome to the User Page</h1>
-        <p class="mb-4">Please log in to access your account.</p>
-    {% endif %}
-</div>
+        {% else %}
+            <h1 class="text-3xl font-bold mb-4">Welcome to the User Page</h1>
+            <p class="mb-4">Please log in to access your account.</p>
+        {% endif %}
+    </div>
 {% endblock %}
