@@ -68,6 +68,48 @@ class Command(BaseCommand):
         )
         subjects_tab.click()
         self.stdout.write("Clicked on 'Subjects' tab")
+    
+    def get_subject_details(self, driver):
+        """Extract and print subject details from the current page"""
+        try:
+            # Wait a bit for page to fully load
+            time.sleep(1)
+            
+            # Get title
+            try:
+                title_element = driver.find_element(By.CSS_SELECTOR, "h2[data-testid='ai-header']")
+                title = title_element.text
+                self.stdout.write(f"  Title: {title}")
+            except Exception as e:
+                self.stdout.write(f"  Could not find title: {e}")
+            
+            # Get faculty
+
+
+
+            try:
+                faculty_element = driver.find_element(By.XPATH, "//*[@id='flex-around-rhs']/aside/div/div/div[1]/div")
+                faculty = faculty_element.text
+                self.stdout.write(f"  Faculty: {faculty}")
+            except Exception as e:
+                self.stdout.write(f"  Could not find faculty: {e}")
+
+
+            
+            
+            # # Get description
+            # try:
+            #     description_element = driver.find_element(By.CSS_SELECTOR, "#Subjectdescription > div.css-1wk50yi-Box--Box-Box-Card--CardBody.e12hqxty1 > div.unset.css-pklc5t-ReadMore--Body.e1ydu1r41 > div")
+            #     description = description_element.text
+            #     self.stdout.write(f"  Description: {description}")
+            # except Exception as e:
+            #     self.stdout.write(f"  Could not find description: {e}")
+                
+        except Exception as e:
+            self.stdout.write(f"  Error extracting subject details: {e}")
+        
+        self.stdout.write("  ---")  # Separator between subjects
+    
 
     def click_subject_links(self, driver):
         """Find and click on subject links after they load"""
@@ -99,6 +141,7 @@ class Command(BaseCommand):
                     
                     # Wait for page to load
                     time.sleep(2)
+                    self.get_subject_details(driver)
                     
                     # Go back to results page
                     driver.back()
@@ -115,3 +158,8 @@ class Command(BaseCommand):
                     
         except Exception as e:
             self.stdout.write(f"Error finding subject containers: {e}")
+    
+
+
+    
+        
