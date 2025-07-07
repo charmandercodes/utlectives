@@ -1,5 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from django.core.management.base import BaseCommand
 import time
 
@@ -26,30 +29,12 @@ class Command(BaseCommand):
         
         self.stdout.write(f"Opening URL with Selenium: {url}")
         
-        # Set up Chrome options
-        chrome_options = Options()
-        if headless:
-            chrome_options.add_argument('--headless')
-        
         driver = None
         try:
-            # Create webdriver instance
-            driver = webdriver.Chrome(options=chrome_options)
-            
-            # Navigate to the URL
-            driver.get(url)
-            
-            self.stdout.write(f"Page title: {driver.title}")
-            self.stdout.write(f"Current URL: {driver.current_url}")
-            
-            # Wait a bit to see the page (if not headless)
-            if not headless:
-                self.stdout.write("Browser window opened. Waiting 10 seconds...")
-                time.sleep(10)
-            
-            # Get page source length
-            page_source = driver.page_source
-            self.stdout.write(f"Page source length: {len(page_source)} characters")
+            driver = self.setup_driver(headless)
+            self.navigate_to_page(driver, url)
+            self.click_subjects_tab(driver)
+            self.display_page_info(driver, headless)
             
         except Exception as e:
             self.stdout.write(f"Error: {e}")
@@ -57,3 +42,38 @@ class Command(BaseCommand):
             if driver:
                 driver.quit()
                 self.stdout.write("Browser closed.")
+
+    def setup_driver(self, headless):
+        """Set up and return Chrome webdriver with options"""
+        chrome_options = Options()
+        if headless:
+            chrome_options.add_argument('--headless')
+        
+        driver = webdriver.Chrome(options=chrome_options)
+        return driver
+
+    def navigate_to_page(self, driver, url):
+        """Navigate to the specified URL and display basic page info"""
+        driver.get(url)
+        self.stdout.write(f"Page title: {driver.title}")
+        self.stdout.write(f"Current URL: {driver.current_url}")
+
+    def click_subjects_tab(self, driver):
+        """Find and click the Subjects tab"""
+        self.stdout.write("Waiting for 'Subjects' tab to load...")
+        wait = WebDriverWait(driver, 10)
+        
+        subjects_tab = wait.until(
+            EC.element_to_be_clickable((By.XPATH, "//li[contains(text(), 'Subjects')]"))
+        )
+        subjects_tab.click()
+        self.stdout.write("Clicked on 'Subjects' tab")
+
+    def display_page_info(self, driver, headless):
+        """Display page information and wait if not headless"""
+        if not headless:
+            self.stdout.write("Browser window opened. Waiting 10 seconds...")
+            time.sleep(10)
+        
+        page_source = driver.page_source
+        self.stdout.write(f"Page source length: {len(page_source)} characters")
