@@ -34,7 +34,7 @@ class Command(BaseCommand):
             driver = self.setup_driver(headless)
             self.navigate_to_page(driver, url)
             self.click_subjects_tab(driver)
-            self.display_page_info(driver, headless)
+            self.click_subject_links(driver)
             
         except Exception as e:
             self.stdout.write(f"Error: {e}")
@@ -69,11 +69,49 @@ class Command(BaseCommand):
         subjects_tab.click()
         self.stdout.write("Clicked on 'Subjects' tab")
 
-    def display_page_info(self, driver, headless):
-        """Display page information and wait if not headless"""
-        if not headless:
-            self.stdout.write("Browser window opened. Waiting 10 seconds...")
-            time.sleep(10)
+    def click_subject_links(self, driver):
+        """Find and click on subject links after they load"""
+        self.stdout.write("Waiting for subject results to load...")
+        wait = WebDriverWait(driver, 15)
         
-        page_source = driver.page_source
-        self.stdout.write(f"Page source length: {len(page_source)} characters")
+        # Wait for search results to appear
+        time.sleep(3)
+        
+        try:
+            # Find all subject containers using the search-results pattern
+            subject_containers = wait.until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#search-results > div"))
+            )
+            
+            self.stdout.write(f"Found {len(subject_containers)} subject containers")
+            
+            # Click on first 3 subjects for testing
+            for i, container in enumerate(subject_containers[:3]):
+                try:
+                    # Find the link within this container using a more specific selector
+                    subject_link = container.find_element(By.CSS_SELECTOR, "a[role='navigation']")
+                    subject_title = container.find_element(By.CSS_SELECTOR, ".result-item-title").text
+                    
+                    self.stdout.write(f"Clicking on subject {i+1}: {subject_title}")
+                    
+                    # Click the subject link
+                    subject_link.click()
+                    
+                    # Wait for page to load
+                    time.sleep(2)
+                    
+                    # Go back to results page
+                    driver.back()
+                    
+                    # Wait for results to reload
+                    time.sleep(2)
+                    
+                    # Re-find containers since we navigated back
+                    subject_containers = driver.find_elements(By.CSS_SELECTOR, "#search-results > div")
+                    
+                except Exception as e:
+                    self.stdout.write(f"Error clicking subject {i+1}: {e}")
+                    continue
+                    
+        except Exception as e:
+            self.stdout.write(f"Error finding subject containers: {e}")
