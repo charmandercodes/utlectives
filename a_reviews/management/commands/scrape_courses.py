@@ -85,16 +85,12 @@ class Command(BaseCommand):
             
             # Get faculty
 
-
-
             try:
                 faculty_element = driver.find_element(By.XPATH, "//*[@id='flex-around-rhs']/aside/div/div/div[1]/div")
                 faculty = faculty_element.text
                 self.stdout.write(f"  Faculty: {faculty}")
             except Exception as e:
                 self.stdout.write(f"  Could not find faculty: {e}")
-
-
             
             
             # # Get description

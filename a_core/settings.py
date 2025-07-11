@@ -153,10 +153,10 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'  # or 'username' or 'username_email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False  # Set to True if you want usernames
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # or 'optional' or 'none'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 # Login/Logout URLs
 LOGIN_URL = '/accounts/login/'
@@ -172,12 +172,11 @@ SESSION_SAVE_EVERY_REQUEST = True
 ACCOUNT_PASSWORD_RESET_CONFIRM_URL = '/accounts/password/reset/key/{key}/'
 
 # Additional useful settings
-ACCOUNT_LOGOUT_ON_GET = False  # Require POST for logout
+ACCOUNT_LOGOUT_ON_GET = False  
 ACCOUNT_PRESERVE_USERNAME_CASING = False
-ACCOUNT_SESSION_REMEMBER = True  # Enable "remember me" functionality
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # 5 minutes
+ACCOUNT_SESSION_REMEMBER = True 
+
+
 
 # Email settings (required for email verification and password reset)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
