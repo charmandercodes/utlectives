@@ -4,7 +4,9 @@
     <div id="review-{{ review.id }}" class="gap-3 py-6 sm:flex sm:items-start{% if show_edit_buttons %} relative{% endif %}"
     hx-get="{% url 'get-reviews' %}?page={{ reviews.next_page_number }}&course_code={{ course.code }}"
     hx-trigger="revealed"
-    hx-swap="afterend">
+    hx-swap="afterend"
+    hx-include="#review-filter-form"
+    >
     {% else %}
     <div id="review-{{ review.id }}" class="gap-3 py-6 sm:flex sm:items-start{% if show_edit_buttons %} relative{% endif %}">
     {% endif %}

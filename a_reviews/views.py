@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
-from a_reviews.filters import CourseFilter
+from a_reviews.filters import CourseFilter, ReviewFilter
 from a_reviews.forms import ReviewForm
 from a_reviews.models import Course, Review
 from django.contrib.auth.decorators import login_required
@@ -13,118 +13,9 @@ from django.conf import settings
 
 # Create your views here.
 
+# CUD Views for Reviews 
 
-
-
-def course_list(request):
-    courses = Course.objects.all()
-    paginator = Paginator(courses, settings.PAGE_SIZE)
-    course_page = paginator.page(1)
-    return render(request, 'a_reviews/home.html', {'courses': course_page})
-
-def course_details(request, code):
-    course = get_object_or_404(Course, code=code)
-    reviews = course.review_set.all().order_by('-review_date')
-    form = ReviewForm()
-
-
-    paginator = Paginator(reviews, settings.PAGE_SIZE)
-    reviews = paginator.page(1)
-
-    # Check if the current user has already reviewed this course
-    user_review = None
-    if request.user.is_authenticated:
-        try:
-            user_review = Review.objects.get(course=course, author=request.user)
-        except Review.DoesNotExist:
-            user_review = None
-    
-    context = {
-        'course': course,
-        'reviews': reviews,
-        'form': form,
-        'user_review': user_review,  # Pass this to the template
-        'is_update': user_review is not None,  # For the modal header
-    }
-    
-    return render(request, 'a_reviews/detail.html', context)
-
-
-# deprecated search
-# def search_courses(request):
-#     query = request.GET.get('search', '')
-
-#     courses = Course.objects.filter(
-#         Q(name__icontains=query)
-#     )
-
-#     return render(request, 'a_reviews/course_list.html', {'courses': courses})
-
-def filter_courses(request):
-    """
-    Handle course filtering, searching, and sorting using django-filters
-    """
-    # Create the filter instance
-    course_filter = CourseFilter(request.GET, queryset=Course.objects.all())
-    
-    # Get the filtered and sorted queryset
-    filtered_courses = course_filter.qs
-    
-    # Handle pagination
-    page_list = request.GET.getlist('page')
-    if page_list:
-        try:
-            page_number = max(int(p) for p in page_list if p.isdigit())
-        except:
-            page_number = 1
-    else:
-        page_number = 1
-    
-    # Apply pagination
-    paginator = Paginator(filtered_courses, settings.PAGE_SIZE)
-    try:
-        course_page = paginator.page(page_number)
-    except:
-        course_page = paginator.page(1)
-    
-    # Debug logging (optional)
-    print(f"Applied filters: {dict(request.GET)}")
-    print(f"Filtered course count: {filtered_courses.count()}")
-    print(f"Showing page {page_number} of {paginator.num_pages}")
-    
-    return render(request, 'a_reviews/course_list.html', {
-        'courses': course_page,
-        'filter': course_filter
-    })
-
-
-@login_required
-def review_create_view(request, code):  # Accept course code parameter
-    course = get_object_or_404(Course, code=code)  # Get the specific course
-    
-    # Check if user already reviewed this course (optional)
-    # if Review.objects.filter(course=course, author=request.user).exists():
-    #     # User already reviewed this course
-    #     return redirect('course-detail', code=code)
-    
-    if request.method == "POST":
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)  # Don't save to DB yet
-            review.course = course           # Set the course
-            review.author = request.user     # Set the author
-            review.save()                    # Now save to DB
-            return redirect('course-detail', code=code)  # Redirect to course page
-    else:
-        form = ReviewForm()
-    
-    context = {
-        'form': form,
-        'course': course,
-        'is_update': False  # Add this flag for create view
-    }
-    return render(request, 'a_reviews/review_form.html', context)
-
+# Create 
 @login_required
 @require_http_methods(["POST"])
 def htmx_create_review(request, code):
@@ -168,9 +59,7 @@ def htmx_create_review(request, code):
         response["HX-Trigger-After-Settle"] = 'fail'
         return response
 
-
-
-
+# Delete 
 @login_required
 @require_http_methods(["GET"])
 def htmx_delete_review_modal(request, review_id):
@@ -201,6 +90,8 @@ def htmx_delete_review(request, review_id):
     
     return response
 
+
+# Update 
 @login_required
 @require_http_methods(["GET"])
 def htmx_update_review_modal(request, review_id):
@@ -259,23 +150,59 @@ def htmx_update_review(request, review_id):
         return render(request, 'a_reviews/partials/edit-modal-content.html', context)
     
 
+# Read - Course Views 
 
-def refresh_course_header(request, course_code):
-    course = get_object_or_404(Course, code=course_code)
-    user_review = None
-    if request.user.is_authenticated:
-        try:
-            user_review = Review.objects.get(course=course, author=request.user)
-        except Review.DoesNotExist:
-            pass
+# view that returns initial course list 
+def course_list(request):
+    courses = Course.objects.all()
+    paginator = Paginator(courses, settings.PAGE_SIZE)
+    course_page = paginator.page(1)
+    return render(request, 'a_reviews/home.html', {'courses': course_page})
+
+# view that returns a filtered list of courses 
+def filter_courses(request):
+    """
+    Handle course filtering, searching, and sorting using django-filters
+    """
+    # Create the filter instance
+    course_filter = CourseFilter(request.GET, queryset=Course.objects.all())
     
-    context = {
-        'course': course,
-        'user_review': user_review,
-    }
-    return render(request, 'a_reviews/detail_components/review_header.html', context)
+    # Get the filtered and sorted queryset
+    filtered_courses = course_filter.qs
+    
+    # Handle pagination
+    page_list = request.GET.getlist('page')
+    if page_list:
+        try:
+            page_number = max(int(p) for p in page_list if p.isdigit())
+        except:
+            page_number = 1
+    else:
+        page_number = 1
+    
+    # Apply pagination
+    paginator = Paginator(filtered_courses, settings.PAGE_SIZE)
+    try:
+        course_page = paginator.page(page_number)
+    except:
+        course_page = paginator.page(1)
+    
+    # Debug logging (optional)
+    print(f"Applied filters: {dict(request.GET)}")
+    print(f"Filtered course count: {filtered_courses.count()}")
+    print(f"Showing page {page_number} of {paginator.num_pages}")
+    
+    return render(request, 'a_reviews/course_list.html', {
+        'courses': course_page,
+        'filter': course_filter
+    })
 
 
+
+
+
+
+# view for infinite scroll with persistent filtering of new items
 def get_courses(request):
     """
     Handle infinite scroll pagination with filtering
@@ -301,19 +228,80 @@ def get_courses(request):
     return render(request, 'a_reviews/course_list.html', context)
 
 
+# Read - Review 
+
+# views that returns initial course reviews page 
+def course_details(request, code):
+    course = get_object_or_404(Course, code=code)
+    reviews = course.review_set.all().order_by('-review_date')
+    form = ReviewForm()
+
+
+    paginator = Paginator(reviews, settings.PAGE_SIZE)
+    reviews = paginator.page(1)
+
+    # Check if the current user has already reviewed this course
+    user_review = None
+    if request.user.is_authenticated:
+        try:
+            user_review = Review.objects.get(course=course, author=request.user)
+        except Review.DoesNotExist:
+            user_review = None
+    
+    context = {
+        'course': course,
+        'reviews': reviews,
+        'form': form,
+        'user_review': user_review,  # Pass this to the template
+        'is_update': user_review is not None,  # For the modal header
+    }
+    
+    return render(request, 'a_reviews/detail.html', context)
+
+
+# View that returns a filtered list of reviews
+def filter_reviews(request, code):
+    course = get_object_or_404(Course, code=code)
+    reviews_queryset = course.review_set.all()
+    
+    review_filter = ReviewFilter(request.GET, queryset=reviews_queryset)
+    filtered_reviews = review_filter.qs
+    
+    if not request.GET.get('sort'):
+        filtered_reviews = filtered_reviews.order_by('-review_date')
+    
+    paginator = Paginator(filtered_reviews, settings.PAGE_SIZE)
+    review_page = paginator.page(1)
+    
+    context = {
+        'reviews': review_page,
+        'course': course,
+    }
+    
+    return render(request, 'a_reviews/detail_components/review.html', context)
+
+
+
+# view for infinite scroll with persistent filtering of new items
 def get_reviews(request):
     """
-    Handle infinite scroll pagination for reviews
+    Handle infinite scroll pagination for reviews with filtering
     """
     page = request.GET.get('page', 1)
-    course_code = request.GET.get('course_code')  # You'll need to pass this
+    course_code = request.GET.get('course_code')
     
-    # Get the course and its reviews
     course = get_object_or_404(Course, code=course_code)
-    reviews = course.review_set.all().order_by('-review_date')
+    reviews_queryset = course.review_set.all()
     
-    # Apply pagination
-    paginator = Paginator(reviews, settings.PAGE_SIZE)
+    # Apply the same filtering logic as filter_reviews
+    review_filter = ReviewFilter(request.GET, queryset=reviews_queryset)
+    filtered_reviews = review_filter.qs
+    
+    # If no sort specified, default to most recent
+    if not request.GET.get('sort'):
+        filtered_reviews = filtered_reviews.order_by('-review_date')
+    
+    paginator = Paginator(filtered_reviews, settings.PAGE_SIZE)
     
     try:
         review_page = paginator.page(page)
@@ -322,8 +310,69 @@ def get_reviews(request):
     
     context = {
         'reviews': review_page,
-        'course': course,  # In case your template needs it
+        'course': course,
     }
     
     return render(request, 'a_reviews/detail_components/review.html', context)
 
+
+# htmx out of band swap that updates the button from 'write a review' to 'view your reviews'
+# as soon as review is submitted from modal (uses htmx to avoid page reload of that state)
+
+def refresh_course_header(request, course_code):
+    course = get_object_or_404(Course, code=course_code)
+    user_review = None
+    if request.user.is_authenticated:
+        try:
+            user_review = Review.objects.get(course=course, author=request.user)
+        except Review.DoesNotExist:
+            pass
+    
+    context = {
+        'course': course,
+        'user_review': user_review,
+    }
+    return render(request, 'a_reviews/detail_components/review_header.html', context)
+
+
+
+
+# Deprecated - To Delete Views 
+
+# @login_required
+# def review_create_view(request, code):  # Accept course code parameter
+#     course = get_object_or_404(Course, code=code)  # Get the specific course
+    
+#     # Check if user already reviewed this course (optional)
+#     # if Review.objects.filter(course=course, author=request.user).exists():
+#     #     # User already reviewed this course
+#     #     return redirect('course-detail', code=code)
+    
+#     if request.method == "POST":
+#         form = ReviewForm(request.POST)
+#         if form.is_valid():
+#             review = form.save(commit=False)  # Don't save to DB yet
+#             review.course = course           # Set the course
+#             review.author = request.user     # Set the author
+#             review.save()                    # Now save to DB
+#             return redirect('course-detail', code=code)  # Redirect to course page
+#     else:
+#         form = ReviewForm()
+    
+#     context = {
+#         'form': form,
+#         'course': course,
+#         'is_update': False  # Add this flag for create view
+#     }
+#     return render(request, 'a_reviews/review_form.html', context)
+
+
+# deprecated search
+# def search_courses(request):
+#     query = request.GET.get('search', '')
+
+#     courses = Course.objects.filter(
+#         Q(name__icontains=query)
+#     )
+
+#     return render(request, 'a_reviews/course_list.html', {'courses': courses})
