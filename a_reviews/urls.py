@@ -16,4 +16,6 @@ urlpatterns = [
     path('htmx/update-review/<int:review_id>/', htmx_update_review, name='htmx-update-review'),
     path('course/<str:course_code>/header/', refresh_course_header, name='refresh-course-header'),
     path('get-courses/', get_courses, name='get-courses'),
+    path('get-reviews/', get_reviews , name='get-reviews'),
+    path('course/<str:code>/reviews/filter/', get_reviews , name='filter_reviews'),
 ]

@@ -1,6 +1,14 @@
 {% for review in reviews %}
 
+    {% if forloop.last and reviews.has_next %}
+    <div id="review-{{ review.id }}" class="gap-3 py-6 sm:flex sm:items-start{% if show_edit_buttons %} relative{% endif %}"
+    hx-get="{% url 'get-reviews' %}?page={{ reviews.next_page_number }}&course_code={{ course.code }}"
+    hx-trigger="revealed"
+    hx-swap="afterend">
+    {% else %}
     <div id="review-{{ review.id }}" class="gap-3 py-6 sm:flex sm:items-start{% if show_edit_buttons %} relative{% endif %}">
+    {% endif %}
+
         <div class="shrink-0 space-y-2 sm:w-48 md:w-72">
             {% if show_edit_buttons and review.course %}
                 <p class="text-gray-900 text-xl font-semi-bold font-sans dark:text-white py-1 no-underline">{{ review.course.name }} </p>

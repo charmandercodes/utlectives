@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_filters",
     "a_users",
     "django_vite",
     "a_reviews",
@@ -189,4 +190,4 @@ ACCOUNT_FORMS = {
 }
 
 
-PAGE_SIZE = 2
+PAGE_SIZE = 5

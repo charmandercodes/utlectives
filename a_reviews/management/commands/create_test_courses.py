@@ -5,7 +5,7 @@ from a_reviews.models import Course  # Adjust import path to your app
 
 
 class Command(BaseCommand):
-    help = 'Create test courses with random data'
+    help = 'Create test courses with random data (Summer or Autumn sessions only)'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -18,7 +18,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         count = options['count']
         
-        # Define the faculties and sessions
+        # Define the faculties and sessions (limited to Summer and Autumn only)
         faculties = [
             'Analytics',
             'Business', 
@@ -29,12 +29,10 @@ class Command(BaseCommand):
             'IT'
         ]
         
+        # Only Summer and Autumn sessions
         sessions = [
-            'Autumn',
-            'Spring', 
             'Summer',
-            'July',
-            'Unavailable'
+            'Autumn'
         ]
         
         # Course name templates for variety
@@ -112,9 +110,8 @@ class Command(BaseCommand):
                 manageability = round(random.uniform(1.0, 5.0), 1)
                 overall_rating = round(random.uniform(1.0, 5.0), 1)
                 
-                # Randomly select 1-3 sessions
-                num_sessions = random.randint(1, 3)
-                course_sessions = random.sample(sessions, num_sessions)
+                # Select only ONE session (either Summer or Autumn)
+                course_sessions = [random.choice(sessions)]
                 
                 # Select faculty
                 faculty = random.choice(faculties)
@@ -153,6 +150,6 @@ class Command(BaseCommand):
         for course in created_courses[:5]:
             self.stdout.write(
                 f"  {course.code}: {course.name} ({course.faculty}) - "
-                f"Sessions: {', '.join(course.sessions)} - "
+                f"Session: {', '.join(course.sessions)} - "
                 f"Rating: {course.overall_rating}/5"
             )

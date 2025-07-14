@@ -1,0 +1,8 @@
+# If course name is exactly "Web Systems"
+python manage.py create_test_reviews "Web Systems"
+
+# If you want to search for courses containing "web"
+python manage.py create_test_reviews "web"
+
+# If course not found, you'll see:
+# "Course with name containing 'nonexistent' not found!"
