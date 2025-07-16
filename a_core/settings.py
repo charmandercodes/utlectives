@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+import os 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ENVIRONMENT = 'production'
+POSTGRES_LOCALLY = False  
 
 # Application definition
 
@@ -177,12 +182,21 @@ ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_SESSION_REMEMBER = True 
 
-
-
 # Email settings (required for email verification and password reset)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
 
-
+if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == True:
+    # For development
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = os.getenv('EMAIL_ADDRESS')
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    DEFAULT_FROM_EMAIL = 'progsoc society'
+    ACCOUNT_EMAIL_SUBJECT_PREFIX = '' 
+else: 
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+    
 
 
 ACCOUNT_FORMS = {

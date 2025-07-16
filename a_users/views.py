@@ -11,6 +11,8 @@ from django.views.decorators.http import require_POST
 from allauth.account.forms import ChangePasswordForm
 # Create your views here.
 
+
+
 @login_required 
 def userView(request):
     # Handle both GET and POST requests
@@ -148,23 +150,23 @@ def change_password_inline(request):
         form = ChangePasswordForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Password changed successfully!')
-            # Return success state - back to display mode
-            return render(request, 'a_users/partials/change-password.html', {'form': None})
+            response = render(request, 'a_users/partials/change-password.html', {
+                'form': None,
+                'hide': False,
+                'show_edited': False
+            })
+            response['HX-Trigger'] = 'passwordChanged'
+            return response
         else:
-            # Return the form with errors in edit mode
             return render(request, 'a_users/partials/change-password.html', {
                 'form': form,
-                'show_edited': True,  # Flag to show edit mode
-                'hide': True  # Flag to hide display mode
+                'show_edited': True,
+                'hide': True
             })
     
-    # For GET requests, return the partial template
-    
     form = ChangePasswordForm(user=request.user)
-
-    context = {
+    return render(request, 'a_users/partials/change-password.html', {
         'form': form,
-        'hide': False,  # Flag to show display mode
-    }
-    return render(request, 'a_users/partials/change-password.html', context)
+        'hide': False,
+        'show_edited': False
+    })

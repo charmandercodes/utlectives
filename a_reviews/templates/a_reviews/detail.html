@@ -11,17 +11,21 @@
 
             <!-- Review Section -->
                 <div class="rounded-lg p-6 shadow-sm mt-3">
-                    <h2 class="text-3xl font-bold font-sans text-gray-900 dark:text-white">Reviews</h2>
+                    <h2 class="text-3xl font-bold font-sans text-gray-900 dark:text-white mb-6">Reviews</h2>
                 <!-- review header -->
                     {% include 'a_reviews/detail_components/review_header.html' %}
                 <!-- review bars -->
                     {% include 'a_reviews/detail_components/review_bars.html' %}
-                <!-- parent div for individual summaries -->
-                    {% include 'a_reviews/detail_components/review-dropdown.html' %}
 
-                    <div class="mt-6 divide-y divide-gray-200 dark:divide-gray-700" id="review-list">
-                        {% include 'a_reviews/detail_components/review.html' %}
+                    <div class="mt-12">
+                        {% include 'a_reviews/detail_components/review-dropdown.html' %}
+
+                        <div class="divide-y divide-gray-200 dark:divide-gray-700" id="review-list">
+                            {% include 'a_reviews/detail_components/review.html' %}
+                        </div>
                     </div>
+                <!-- parent div for individual summaries -->
+ 
                 </div>
             </div>
 
