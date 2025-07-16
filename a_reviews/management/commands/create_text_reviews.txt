@@ -1,0 +1,9 @@
+# Basic usage (creates up to 50 test users)
+python manage.py create_random_reviews
+
+# Create more test users if needed
+python manage.py create_random_reviews --max-users 100
+
+python manage.py delete_test_reviews
+
+python manage.py delete_test_reviews --confirm

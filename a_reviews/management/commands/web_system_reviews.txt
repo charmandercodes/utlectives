@@ -1,5 +1,5 @@
 # If course name is exactly "Web Systems"
-python manage.py create_test_reviews "Web Systems"
+python manage.py web_system_reviews "Web Systems"
 
 # If you want to search for courses containing "web"
 python manage.py create_test_reviews "web"
