@@ -199,9 +199,6 @@ def filter_courses(request):
 
 
 
-
-
-
 # view for infinite scroll with persistent filtering of new items
 def get_courses(request):
     """

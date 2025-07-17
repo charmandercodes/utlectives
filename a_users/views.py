@@ -9,9 +9,12 @@ from django.contrib.auth import logout
 from allauth.account.utils import send_email_confirmation
 from django.views.decorators.http import require_POST
 from allauth.account.forms import ChangePasswordForm
+from django_htmx.http import HttpResponseClientRedirect
 # Create your views here.
 
 
+
+# Basic page views
 
 @login_required 
 def userView(request):
@@ -32,6 +35,8 @@ def userView(request):
 def termsView(request):
     return render(request, 'pages/terms.html')
 
+
+# Review Views 
 
 def deleteUserView(request, review_id):
     review = Review.objects.get(id=review_id)
@@ -66,6 +71,7 @@ def update_users_review(request, review_id):
     })
 
 
+# Account views 
 
 @login_required
 def update_username(request):
@@ -96,18 +102,16 @@ def update_username(request):
             request.user.username = new_username
             request.user.save()
             messages.success(request, 'Username updated successfully!')
+            return HttpResponseClientRedirect(request.path)
     
-    return redirect('user-page')
+    return render(request, 'a_users/components/update-username.html')
 
 
 @login_required
 def delete_account(request):
     if request.method == 'POST':
         user = request.user
-        
-        # Optional: Send goodbye email
-        # send_goodbye_email(user.email)
-        
+
         # Log the user out first
         logout(request)
         
@@ -122,26 +126,6 @@ def delete_account(request):
     
     # If GET request, redirect back to account page
     return redirect('user-page')
-
-
-
-
-from allauth.account.models import EmailAddress
-
-@login_required
-@require_POST
-def resend_verification_email(request):
-    try:
-        email_record = EmailAddress.objects.filter(user=request.user).first()
-        if email_record and email_record.verified:
-            messages.info(request, "Your email is already verified.")
-        else:
-            send_email_confirmation(request, request.user)
-            messages.success(request, 'Verification email sent successfully! Please check your inbox.')
-    except Exception as e:
-        messages.error(request, 'Failed to send verification email. Please try again later.')
-    
-    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required
@@ -170,3 +154,26 @@ def change_password_inline(request):
         'hide': False,
         'show_edited': False
     })
+
+
+
+
+
+# need to clean views 
+
+from allauth.account.models import EmailAddress
+
+@login_required
+@require_POST
+def resend_verification_email(request):
+    try:
+        email_record = EmailAddress.objects.filter(user=request.user).first()
+        if email_record and email_record.verified:
+            messages.info(request, "Your email is already verified.")
+        else:
+            send_email_confirmation(request, request.user)
+            messages.success(request, 'Verification email sent successfully! Please check your inbox.')
+    except Exception as e:
+        messages.error(request, 'Failed to send verification email. Please try again later.')
+    
+    return redirect(request.META.get('HTTP_REFERER', '/'))

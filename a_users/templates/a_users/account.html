@@ -6,38 +6,12 @@
 
         <div class="space-y-6">
             <!-- Username Section -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Username</label>
-                <div class="flex items-center space-x-3">
-                    <!-- Display mode -->
-                    <div id="username-display" class="flex items-center space-x-2">
-                        <p class="text-gray-900 dark:text-white">{{ user.username }}</p>
-                        <button onclick="editUsername()" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-                            Edit
-                        </button>
-                    </div>
 
-                    <!-- Edit mode (hidden by default) -->
-                    <div id="username-edit" class="hidden flex items-center space-x-2 w-full">
-                        <form method="post" action="{% url 'update-username' %}" class="flex items-center space-x-2 w-full">
-                            {% csrf_token %}
-                            <input
-                                type="text"
-                                name="username"
-                                value="{{ user.username }}"
-                                class="flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required
-                            >
-                            <button type="submit" class="text-sm bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700">
-                                Save
-                            </button>
-                            <button type="button" onclick="cancelEdit()" class="text-sm bg-gray-500 text-white px-3 py-2 rounded-lg hover:bg-gray-600">
-                                Cancel
-                            </button>
-                        </form>
-                    </div>
-                </div>
+            <div id="username-section">
+                {% include 'a_users/components/update-username.html' %}
             </div>
+            
+
 
             <!-- Email Section -->
             <div>
