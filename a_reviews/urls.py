@@ -24,6 +24,6 @@ urlpatterns = [
     path('course/<str:code>/reviews/filter/', filter_reviews, name='filter_reviews'),
     path('get-reviews/', get_reviews , name='get-reviews'),
     
-    # OOB Swap
+    # OOB Swap (false positive need to remove this, actual tempalte with oob with review_with_header attached to htmx_create_view)
     path('course/<str:course_code>/header/', refresh_course_header, name='refresh-course-header'),
 ]
