@@ -10,6 +10,8 @@ from allauth.account.utils import send_email_confirmation
 from django.views.decorators.http import require_POST
 from allauth.account.forms import ChangePasswordForm
 from django_htmx.http import HttpResponseClientRedirect
+
+from a_users.forms import UpdateUsernameForm
 # Create your views here.
 
 
@@ -17,7 +19,7 @@ from django_htmx.http import HttpResponseClientRedirect
 # Basic page views
 
 @login_required 
-def userView(request):
+def user_page(request):
     # Handle both GET and POST requests
     if request.method == 'POST':
         # If it's a POST request, redirect to GET (POST-Redirect-GET pattern)
@@ -32,13 +34,13 @@ def userView(request):
     }
     return render(request, 'a_users/user.html', context)
 
-def termsView(request):
+def terms_and_conditions_page(request):
     return render(request, 'pages/terms.html')
 
 
 # Review Views 
 
-def deleteUserView(request, review_id):
+def delete_review(request, review_id):
     review = Review.objects.get(id=review_id)
 
     if request.method == 'POST':
@@ -73,39 +75,85 @@ def update_users_review(request, review_id):
 
 # Account views 
 
-@login_required
-def update_username(request):
-    if request.method == 'POST':
-        new_username = request.POST.get('username', '').strip()
-        
-        if not new_username:
-            messages.error(request, 'Username cannot be empty.')
-            return redirect('user-page')
-        
-        # Basic security validation
-        import re
-        
-        # Length check
-        if len(new_username) < 3 or len(new_username) > 30:
-            messages.error(request, 'Username must be 3-30 characters.')
-            return redirect('user-page')
-        
-        # Only allow safe characters
-        if not re.match(r'^[a-zA-Z0-9_-]+$', new_username):
-            messages.error(request, 'Username can only contain letters, numbers, underscores, and hyphens.')
-            return redirect('user-page')
-        
-        # Check if username already exists
-        if User.objects.filter(username=new_username).exclude(id=request.user.id).exists():
-            messages.error(request, 'Username already taken.')
-        else:
-            request.user.username = new_username
-            request.user.save()
-            messages.success(request, 'Username updated successfully!')
-            return HttpResponseClientRedirect(request.path)
-    
-    return render(request, 'a_users/components/update-username.html')
 
+# Update Username
+
+
+@login_required
+def change_password_inline(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            response = render(request, 'a_users/partials/change-password.html', {
+                'form': None,
+                'hide': False,
+                'show_edited': False
+            })
+            response['HX-Trigger'] = 'passwordChanged'
+            return response
+        else:
+            return render(request, 'a_users/partials/change-password.html', {
+                'form': form,
+                'show_edited': True,
+                'hide': True
+            })
+    
+    form = ChangePasswordForm(user=request.user)
+    return render(request, 'a_users/partials/change-password.html', {
+        'form': form,
+        'hide': False,
+        'show_edited': False
+    })
+
+# @login_required
+# def update_username(request):
+#     if request.method == 'POST':
+#         new_username = request.POST.get('username', '').strip()
+        
+#         if not new_username:
+#             messages.error(request, 'Username cannot be empty.')
+#             return redirect('user-page')
+        
+#         # Basic security validation
+#         import re
+        
+#         # Length check
+#         if len(new_username) < 3 or len(new_username) > 30:
+#             messages.error(request, 'Username must be 3-30 characters.')
+#             return redirect('user-page')
+        
+#         # Only allow safe characters
+#         if not re.match(r'^[a-zA-Z0-9_-]+$', new_username):
+#             messages.error(request, 'Username can only contain letters, numbers, underscores, and hyphens.')
+#             return redirect('user-page')
+        
+#         # Check if username already exists
+#         if User.objects.filter(username=new_username).exclude(id=request.user.id).exists():
+#             messages.error(request, 'Username already taken.')
+#         else:
+#             request.user.username = new_username
+#             request.user.save()
+#             messages.success(request, 'Username updated successfully!')
+    
+#     return render(request, 'a_users/components/update-username.html')
+
+@login_required
+def update_username_inline(request):
+    if request.method == 'POST':
+        form = UpdateUsernameForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            response = render(request, 'a_users/oob/update-username-with-title.html')
+            response['HX-Trigger'] = 'usernameUpdated'
+            return response
+        else:
+            return render(request, 'a_users/components/update-username.html', {'form': form})
+    
+    form = UpdateUsernameForm(user=request.user)
+    return render(request, 'a_users/components/update-username.html', {'form': form})
+
+# Delete Account 
 
 @login_required
 def delete_account(request):
@@ -156,24 +204,3 @@ def change_password_inline(request):
     })
 
 
-
-
-
-# need to clean views 
-
-from allauth.account.models import EmailAddress
-
-@login_required
-@require_POST
-def resend_verification_email(request):
-    try:
-        email_record = EmailAddress.objects.filter(user=request.user).first()
-        if email_record and email_record.verified:
-            messages.info(request, "Your email is already verified.")
-        else:
-            send_email_confirmation(request, request.user)
-            messages.success(request, 'Verification email sent successfully! Please check your inbox.')
-    except Exception as e:
-        messages.error(request, 'Failed to send verification email. Please try again later.')
-    
-    return redirect(request.META.get('HTTP_REFERER', '/'))
