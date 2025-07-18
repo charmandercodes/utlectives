@@ -1,4 +1,4 @@
-# django-vite-starter
+# utlectives instructions
 
 
 1. Git clone repository
@@ -12,38 +12,48 @@ git clone https://github.com/charmandercodes/django-vite-starter.git . && rm -rf
 ```python
 python3 -m venv venv
 ```
+2. Activate virtual environment
 
 ```python
 source venv/bin/activate
 ```
 
-1. upgrade pip
+3. upgrade pip
 
 ```python
 pip install --upgrade pip 
 ```
 
-1. Install requirements.txt
+4. Install requirements.txt
 
 ```python
 pip install -r requirements.txt 
 ```
 
-1. migrate the database
+5. migrate the database
 
 ```python
 python manage.py migrate
 ```
 
-1. Create admin user
+6. Create admin user
 
 ```python
 python manage.py createsuperuser
 ```
 
-1. Run server
+7. Run server
 
 ```python
 python manage.py runserver
 ```
-# utlectives
+
+----------
+
+8. Open new terminal and run (for node build tools -> tailwind, htmx, daisy ui etc)
+
+```python
+npm run dev 
+```
+
+
