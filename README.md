@@ -4,7 +4,7 @@
 1. Git clone repository
 
 ```python
-git clone https://github.com/charmandercodes/django-vite-starter.git . && rm -rf .git
+git clone git clone --branch filter-rewrite --single-branch https://github.com/charmandercodes/utlectives.git . && rm -rf .git
 ```
 
 1. Create virtual environment
