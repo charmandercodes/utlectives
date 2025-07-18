@@ -52,7 +52,7 @@ python manage.py runserver
 ```
 
 
-## node build tools (tailwind, htmx, daisy ui etc)
+## Node build tools (tailwind, htmx, daisy ui etc)
 
 In new terminal run the following
 
