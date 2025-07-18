@@ -53,6 +53,10 @@ python manage.py runserver
 8. Open new terminal and run (for node build tools -> tailwind, htmx, daisy ui etc)
 
 ```python
+npm i
+```
+
+```python
 npm run dev 
 ```
 
