@@ -209,3 +209,7 @@ ACCOUNT_FORMS = {
 PAGE_SIZE = 5
 
 
+
+
+
+ACCOUNT_ADAPTER = 'a_users.adapters.CustomAccountAdapter'

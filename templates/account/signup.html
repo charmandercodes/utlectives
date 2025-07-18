@@ -31,6 +31,10 @@
                     <form class="space-y-4 md:space-y-6" method="POST" action="{% url 'account_signup' %}">
                         {% csrf_token %}
 
+                        {% if request.GET.next %}
+                            <input type="hidden" name="next" value="{{ request.GET.next }}">
+                        {% endif %}
+
                     <!-- Email Field -->
                         <div>
                             <label for="{{ form.email.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -155,7 +159,7 @@
                     <!-- Sign In Link -->
                         <p class="text-center text-sm font-light text-gray-500 dark:text-gray-400">
                             {% trans "Already have an account?" %}
-                            <a href="{% url 'account_login' %}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                            <a href="{% url 'account_login' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
                                 {% trans "Sign in here" %}
                             </a>
                         </p>

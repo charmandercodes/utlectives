@@ -144,7 +144,7 @@ def update_username_inline(request):
         form = UpdateUsernameForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            response = render(request, 'a_users/oob/update-username-with-title.html')
+            response = render(request, 'a_users/oob/update-username-with-title-and-delete-form.html')
             response['HX-Trigger'] = 'usernameUpdated'
             return response
         else:
@@ -202,5 +202,3 @@ def change_password_inline(request):
         'hide': False,
         'show_edited': False
     })
-
-
