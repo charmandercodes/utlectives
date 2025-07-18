@@ -1,10 +1,11 @@
 # utlectives instructions
 
+## Server
 
 1. Git clone repository
 
 ```python
-git clone git clone --branch filter-rewrite --single-branch https://github.com/charmandercodes/utlectives.git . && rm -rf .git
+git clone --branch filter-rewrite --single-branch https://github.com/charmandercodes/utlectives.git . && rm -rf .git
 ```
 
 1. Create virtual environment
@@ -48,9 +49,10 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-----------
 
-8. Open new terminal and run (for node build tools -> tailwind, htmx, daisy ui etc)
+## node build tools -> tailwind, htmx, daisy ui etc
+
+1. in new terminal run the following commands
 
 ```python
 npm i
@@ -59,5 +61,20 @@ npm i
 ```python
 npm run dev 
 ```
+
+## Populating database with courses and reviews
+
+```python
+python manage.py create_test_courses
+```
+
+```python
+python manage.py create_random_reviews
+```
+
+
+
+
+
 
 
