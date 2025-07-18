@@ -2,6 +2,8 @@
 
 ## Server
 
+0. Create folder 'utlectives' drag drop into vscode open terminal
+
 1. Git clone repository
 
 ```python
@@ -50,9 +52,9 @@ python manage.py runserver
 ```
 
 
-## node build tools -> tailwind, htmx, daisy ui etc
+## node build tools (tailwind, htmx, daisy ui etc)
 
-1. in new terminal run the following commands
+In new terminal run the following
 
 ```python
 npm i
@@ -63,6 +65,8 @@ npm run dev
 ```
 
 ## Populating database with courses and reviews
+
+In new terminal run the following (activate venv)
 
 ```python
 python manage.py create_test_courses
