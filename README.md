@@ -54,7 +54,7 @@ python manage.py runserver
 
 ## Node build tools (tailwind, htmx, daisy ui etc)
 
-In new terminal run the following
+In a new terminal run the following
 
 ```python
 npm i
@@ -66,14 +66,14 @@ npm run dev
 
 ## Populating database with courses and reviews
 
-In new terminal run the following (activate venv)
+In a new terminal run the following (make sure virtual environment is activated - source venv/bin/activate)
 
 ```python
 python manage.py create_test_courses
 ```
 
 ```python
-python manage.py create_random_reviews
+python manage.py create_test_reviews
 ```
 
 
