@@ -7,6 +7,14 @@ from a_users.adapters import User
 
 
 class CustomSignupForm(SignupForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Remove password fields for passwordless authentication
+        if 'password1' in self.fields:
+            del self.fields['password1']
+        if 'password2' in self.fields:
+            del self.fields['password2']
+    
     def clean_email(self):
         email = self.cleaned_data.get('email')
         
@@ -29,6 +37,9 @@ class CustomSignupForm(SignupForm):
     def save(self, request):
         # Call the parent save method
         user = super().save(request)
+        # Set an unusable password since we're not using passwords
+        user.set_unusable_password()
+        user.save()
         # You can add additional processing here if needed
         return user
 
