@@ -6,17 +6,12 @@ on:
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
     steps:
       - uses: actions/checkout@v4
-      - name: Docker Login
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker Image
         run: |
+          docker login ghcr.io --username charmandercodes --password ${{ secrets.UTLECTIVES_PAT }}
           docker build . -t ghcr.io/progsoc/utlectives
           docker push ghcr.io/progsoc/utlectives
+
+           
