@@ -10,9 +10,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and push Docker Image
         run: |
-          docker login ghcr.io --username charmandercodes --password ${{ secrets.GITHUB_TOKEN }}
+          docker login ghcr.io --username charmandercodes --password ${{ secrets.UTLECTIVES_PAT }}
           docker build . -t ghcr.io/progsoc/utlectives
           docker push ghcr.io/progsoc/utlectives
+    permissions: 
+      packages: write
+      id-token: write
 
            
 
