@@ -13,9 +13,6 @@ jobs:
           docker login ghcr.io --username charmandercodes --password ${{ secrets.UTLECTIVES_PAT }}
           docker build . -t ghcr.io/progsoc/utlectives
           docker push ghcr.io/progsoc/utlectives
-    permissions: 
-      packages: write
-      id-token: write
 
            
 
