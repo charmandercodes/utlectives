@@ -1,5 +1,5 @@
 # Create 30 test courses (default)
-python manage.py create_test_courses
+python manage.py create_test_reviews
 
 # Create 50 test courses
 python manage.py create_test_courses --count 50

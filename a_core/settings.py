@@ -35,6 +35,7 @@ elif ENVIRONMENT == 'development':
     DEBUG = True
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 POSTGRES_LOCALLY = False  
 
