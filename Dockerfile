@@ -1,3 +1,13 @@
+
+FROM node:18 AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+
+
 # Image: Python 3.11
 FROM python:3.11
 
@@ -19,6 +29,11 @@ RUN pip install -r requirements.txt
 
 # copy the current directory contents into the container at /app
 COPY . /app
+
+# Copy built assets from frontend stage
+COPY --from=frontend /app/assets ./static/assets
+# Run collectstatic during image build
+RUN python manage.py collectstatic --noinput
 
 # collecstatic
 
