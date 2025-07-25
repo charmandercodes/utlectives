@@ -158,9 +158,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
-    BASE_DIR / "assets",
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'assets'),  # Include the assets folder
 ]
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
