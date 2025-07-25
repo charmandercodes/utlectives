@@ -34,7 +34,7 @@ if ENVIRONMENT == 'production':
 elif ENVIRONMENT == 'development':    
     DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
 
 POSTGRES_LOCALLY = False  
 
