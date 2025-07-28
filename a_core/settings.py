@@ -35,7 +35,9 @@ elif ENVIRONMENT == 'development':
     DEBUG = True
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
+
+if ENVIRONMENT == "production":
+    CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 POSTGRES_LOCALLY = False
 
@@ -161,9 +163,21 @@ STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'assets'),  # Include the assets folder
+    os.path.join(BASE_DIR, 'assets'),
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# fix this for later whitenoise flex tap
+
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -171,11 +185,18 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-DJANGO_VITE = {
-  "default": {
-    "dev_mode": False
-  }
-}
+if ENVIRONMENT == 'production': 
+    DJANGO_VITE = {
+    "default": {
+        "dev_mode": False
+    }
+    }
+else:
+    DJANGO_VITE = {
+    "default": {
+        "dev_mode": True
+    }
+    }
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -241,3 +262,9 @@ SITE_ID = 1
 
 
 ACCOUNT_ADAPTER = 'a_users.adapters.CustomAccountAdapter'
+
+
+# Add this to skip post-processing for specific patterns
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = ['css']
+# or more specifically:
+WHITENOISE_MANIFEST_STRICT = False
