@@ -13,5 +13,32 @@ jobs:
           docker login ghcr.io --username charmandercodes --password ${{ secrets.UTLECTIVES_PAT }}
           docker build . -t ghcr.io/progsoc/utlectives
           docker push ghcr.io/progsoc/utlectives
+  deploy:
+    needs: build_and_publish
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            # Navigate to your project directory
+            cd /path/to/your/project
+            
+            # Pull the latest image
+            docker pull ghcr.io/progsoc/utlectives
+            
+            # Stop and remove existing containers
+            docker compose down
+            
+            # Start containers with new image
+            docker compose up -d
+            
+            # Optional: Clean up old images
+            docker image prune -f
 
            
