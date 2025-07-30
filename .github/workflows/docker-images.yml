@@ -27,7 +27,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             # Navigate to your project directory
-            cd /path/to/your/project
+            cd /opt/progsoc/utlectives
             
             # Pull the latest image
             docker pull ghcr.io/progsoc/utlectives
