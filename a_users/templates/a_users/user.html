@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block content %}
-    <div class="p-4 sm:ml-4 ml-16">
+    <div class="p-4 sm:ml-16">
     <!-- if user is authenticated -->
         {% if user.is_authenticated %}
-            <div class="p-4 rounded-lg dark:border-gray-700 mt-8">
+            <div class="p-4 rounded-lg dark:border-gray-700">
             <!-- Default homepage content -->
                 <div id="account-welcome" class="flex flex-col items-left justify-center h-48 mb-4 rounded-sm bg-gray-50 dark:bg-gray-900 dark:text-white">
                     <p class="mb-4">&nbsp;</p>
@@ -18,7 +18,7 @@
                 </div>
 
             <!-- Tab System -->
-                <div x-data="{ activeTab: 'reviews' }" class="mb-4">
+                <div x-data="{ activeTab: 'reviews' }" class="mb-4 mt-4">
                 <!-- Tab Navigation -->
                     <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
                         <nav class="-mb-px flex space-x-8">

@@ -5,8 +5,8 @@
 
 {% block content %}
 
-    <div class="p-4 sm:ml-16 ml-4">
-        <div class="p-4 rounded-lg dark:border-gray-700 mt-8">
+    <div class="p-4 sm:ml-16 ">
+        <div class="p-4 rounded-lg dark:border-gray-700">
       <!-- Default homepage content -->
             <div class="flex flex-col items-left justify-center h-48 mb-4 rounded-sm bg-gray-50 dark:bg-gray-900 dark:text-white">
                 <p class="mb-4">Progsoc presents</p>
@@ -20,10 +20,10 @@
                     <!-- Replace the existing div with class "flex items-center gap-3" -->
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 rounded-lg bg-gray-50 dark:bg-gray-800 p-6 shadow-sm hover:shadow-md transition-shadow mb-4">
                         <!-- Search input with full width on mobile -->
-                        <div class="flex-1 flex items-center gap-3">
+                        <div class="flex-1 min-w-0 flex items-center">
                             <input
                                 type="text"
-                                class="flex-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                class="flex-1 min-w-0 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                 placeholder="Search courses..."
                                 name="search"
                                 hx-get="{% url 'filter_courses' %}"
@@ -46,7 +46,7 @@
                         </div>
                         
                         <!-- Buttons container - stacks on mobile, inline on larger screens -->
-                        <div class="flex gap-3 w-full sm:w-auto">
+                        <div class="flex gap-3 flex-shrink-0">
                             <!-- Sort Dropdown -->
                             <div class="dropdown flex-1 sm:flex-none">
                                 <div tabindex="0" role="button" class="flex items-center justify-center gap-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all w-full">
