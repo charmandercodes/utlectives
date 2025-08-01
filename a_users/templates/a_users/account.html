@@ -12,11 +12,10 @@
             </div>
             
 
-
             <!-- Email Section -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
-                <div class="flex items-center space-x-3">
+                <div class="text-xs flex items-center space-x-3">
                     <p class="text-gray-900 dark:text-white">{{ user.email }}</p>
                     {% for email_address in user.emailaddress_set.all %}
                         {% if email_address.email == user.email %}

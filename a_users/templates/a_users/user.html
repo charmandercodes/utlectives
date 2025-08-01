@@ -6,14 +6,14 @@
 {% endblock %}
 
 {% block content %}
-    <div class="p-4 sm:ml-16">
+    <div class="p-4 sm:ml-16 ">
     <!-- if user is authenticated -->
         {% if user.is_authenticated %}
             <div class="p-4 rounded-lg dark:border-gray-700">
             <!-- Default homepage content -->
                 <div id="account-welcome" class="flex flex-col items-left justify-center h-48 mb-4 rounded-sm bg-gray-50 dark:bg-gray-900 dark:text-white">
                     <p class="mb-4">&nbsp;</p>
-                    <h1 class="mb-4 text-7xl font-bold font-sans text-white">Welcome<span class="text-orange-500"> {{ user }}</span></h1>
+                    <h1 class="mb-4 sm:text-7xl text-6xl font-bold font-sans text-white">Welcome<span class="sm:text-7xl text-5xl text-orange-500"> {{ user }}</span></h1>
                     <p>Manage your account and reviews here</p>
                 </div>
 
