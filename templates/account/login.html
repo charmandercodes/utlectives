@@ -67,13 +67,6 @@
                             {% trans "Sign in" %}
                         </button>
 
-                    <!-- Sign Up Link -->
-                        <p class="text-center text-sm font-light text-gray-500 dark:text-gray-400">
-                            {% trans "Don't have an account yet?" %}
-                            <a href="{% url 'account_signup' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                                {% trans "Sign up" %}
-                            </a>
-                        </p>
                     </form>
                 </div>
             </div>
