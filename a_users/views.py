@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
+from django.urls import reverse
 from a_reviews.models import Review
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -202,3 +203,31 @@ def change_password_inline(request):
         'hide': False,
         'show_edited': False
     })
+
+
+
+# views.py
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.utils.translation import gettext as _
+from allauth.account.adapter import get_adapter
+
+def restart_login(request):
+    """Clear entire session and restart login process"""
+    
+    # Preserve the 'next' parameter before clearing session
+    next_url = request.GET.get('next', '')
+    
+    # Clear the entire session (like logging out)
+    request.session.flush()
+    
+    # Add a helpful message
+    messages.info(request, _("Please enter your email address to receive a new sign-in code."))
+    
+    # Redirect to login page
+    login_url = reverse('account_login')
+    
+    if next_url:
+        return redirect(f"{login_url}?next={next_url}")
+    else:
+        return redirect(login_url)

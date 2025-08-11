@@ -19,7 +19,13 @@
                         {% trans "Enter Sign In Code" %}
                     </h1>
                     <p class="text-center text-sm text-gray-500 dark:text-gray-400">
-                        {% trans "Please enter the 6-digit code sent to your email address" %}
+                        {% if request.session.verification_email %}
+                            {% blocktrans with email=request.session.verification_email %}
+                                Please enter the 6-digit code sent to your email address: {{email}}
+                            {% endblocktrans %}
+                        {% else %}
+                            {% trans "Please enter the 6-digit code sent to your email address." %}
+                        {% endif %}
                     </p>
 
                     <!-- Display non-field errors -->
@@ -74,18 +80,11 @@
                         <!-- Back to Sign In Link -->
                         <p class="text-center text-sm font-light text-gray-500 dark:text-gray-400">
                             {% trans "Having trouble?" %}
-                            <a href="{% url 'account_login' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                            <a href="{% url 'restart_login' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
                                 {% trans "Back to sign in" %}
                             </a>
                         </p>
 
-                        <!-- Resend Code Link (if applicable) -->
-                        <p class="text-center text-sm font-light text-gray-500 dark:text-gray-400">
-                            {% trans "Didn't receive the code?" %}
-                            <a href="#" onclick="window.location.reload();" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                                {% trans "Resend code" %}
-                            </a>
-                        </p>
                     </form>
                 </div>
             </div>
