@@ -208,6 +208,25 @@ def change_password_inline(request):
 
 # views.py
 from django.shortcuts import redirect
+from django.urls import reverse
+
+def signup_with_fresh_session(request):
+    """Clear session and redirect to signup"""
+    # Preserve the 'next' parameter if it exists
+    next_url = request.GET.get('next', '')
+    
+    # Clear the entire session
+    request.session.flush()
+    
+    # Redirect to signup page
+    if next_url:
+        signup_url = reverse('account_signup')
+        return redirect(f"{signup_url}?next={next_url}")
+    else:
+        return redirect('account_signup')
+
+# views.py
+from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from allauth.account.adapter import get_adapter
