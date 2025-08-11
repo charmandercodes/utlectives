@@ -18,16 +18,22 @@ Including another URLconf
 
 # urls.py
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path, include
 from django.views.generic import RedirectView
-from a_users.views import restart_login, signup_with_fresh_session
+from a_users.views import restart_login, signup_with_fresh_session, redirect_to_login_code, CustomSignupView
+
+
+
 
 urlpatterns = [
     path("", RedirectView.as_view(pattern_name='course-list', permanent=False)),  # Redirect to named URL
     path("admin/", admin.site.urls),
     path('users/', include('a_users.urls')),
     path('reviews/', include('a_reviews.urls')),
+    path('accounts/login/', redirect_to_login_code, name='account_login'),
     path('signup-fresh/', signup_with_fresh_session, name='signup_fresh'),
+    path('accounts/signup/', CustomSignupView.as_view(), name='account_signup'),
     path('restart-login/', restart_login, name='restart_login'),
     path('accounts/', include('allauth.urls')),
     path('silk/', include('silk.urls', namespace='silk'))

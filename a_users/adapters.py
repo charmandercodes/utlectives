@@ -50,12 +50,11 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         if request and email:
             request.session['verification_email'] = email
             
-            # Add full signup URL to context for unknown account emails
-            if 'unknown' in template_prefix.lower():
-                from django.urls import reverse
-                signup_path = reverse('signup_fresh')
-                signup_url = request.build_absolute_uri(signup_path)
-                context['signup_url'] = signup_url
+            # Add protocol and domain for URL construction
+            context.update({
+                'protocol': 'https' if request.is_secure() else 'http',
+                'domain': request.get_host(),
+            })
         
         super().send_mail(template_prefix, email, context)
     

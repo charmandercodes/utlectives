@@ -6,6 +6,6 @@ This mail can be safely ignored if you did not initiate this action.
 
 If it was you, you can sign up for an account using the link below.
 
-{{ signup_url }}
+{{ protocol }}://{{ domain }}{% url 'account_signup' %}
 
 Thank you for using {{ current_site.name }}!

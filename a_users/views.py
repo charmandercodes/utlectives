@@ -11,6 +11,7 @@ from allauth.account.utils import send_email_confirmation
 from django.views.decorators.http import require_POST
 from allauth.account.forms import ChangePasswordForm
 from django_htmx.http import HttpResponseClientRedirect
+from allauth.account.views import SignupView
 
 from a_users.forms import UpdateUsernameForm
 # Create your views here.
@@ -250,3 +251,18 @@ def restart_login(request):
         return redirect(f"{login_url}?next={next_url}")
     else:
         return redirect(login_url)
+    
+
+def redirect_to_login_code(request):
+    # Preserve any 'next' parameter
+    next_url = request.GET.get('next', '')
+    if next_url:
+        return redirect(f"/accounts/login/code/?next={next_url}")
+    return redirect('account_request_login_code')
+
+
+class CustomSignupView(SignupView):
+    def dispatch(self, request, *args, **kwargs):
+        """Clear session for fresh signup"""
+        request.session.flush()
+        return super().dispatch(request, *args, **kwargs)
