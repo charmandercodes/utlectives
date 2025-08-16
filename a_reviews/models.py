@@ -9,10 +9,11 @@ class Course(models.Model):
     code = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=50)
     description = models.TextField()
-    enjoyment = models.FloatField(default=0.0)          # Cached average
-    usefullness = models.FloatField(default=0.0)        # Cached average
-    manageability = models.FloatField(default=0.0)      # Cached average
-    overall_rating = models.FloatField(default=0.0)     # Cached average
+    enjoyment = models.FloatField(default=0.0)
+    usefullness = models.FloatField(default=0.0)
+    manageability = models.FloatField(default=0.0)
+    overall_rating = models.FloatField(default=0.0)
+    review_count = models.PositiveIntegerField(default=0)  # Add this line
     sessions = models.JSONField(default=list)
     page_reference = models.URLField(max_length=200, blank=True, null=True)
     faculty = models.CharField(max_length=50, blank=True, null=True)
@@ -25,10 +26,12 @@ class Course(models.Model):
         return self.review_set.count()
     
     def update_ratings(self):
-        """Update cached rating averages"""
+        """Update cached rating averages and review count"""
         from django.db.models import Avg
         
         reviews = self.review_set.all()
+        review_count = reviews.count()
+        
         if reviews.exists():
             averages = reviews.aggregate(
                 avg_enjoyment=Avg('enjoyment'),
@@ -47,7 +50,18 @@ class Course(models.Model):
             self.manageability = 0.0
             self.overall_rating = 0.0
         
-        self.save(update_fields=['enjoyment', 'usefullness', 'manageability', 'overall_rating'])
+        self.review_count = review_count  # Update the cached count
+        
+        self.save(update_fields=[
+            'enjoyment', 'usefullness', 'manageability', 
+            'overall_rating', 'review_count'
+        ])
+
+    class Meta:
+        ordering = ['-overall_rating','-review_count']
+
+
+
 
 class Review(models.Model):
     # required 
