@@ -23,8 +23,8 @@ jobs:
           pip install -r dev-requirements.txt
       
       - name: Install Playwright browsers
-      run: |
-        playwright install chromium --with-deps
+        run: |
+          playwright install chromium --with-deps
 
       - name: Run tests
         run: |
