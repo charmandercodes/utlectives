@@ -17,6 +17,7 @@ class Course(models.Model):
     sessions = models.JSONField(default=list)
     page_reference = models.URLField(max_length=200, blank=True, null=True)
     faculty = models.CharField(max_length=50, blank=True, null=True)
+    has_sessions = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
         return f"{self.code} - {self.name}"
@@ -58,7 +59,9 @@ class Course(models.Model):
         ])
 
     class Meta:
-        ordering = ['-overall_rating','-review_count']
+        ordering = ['-has_sessions', '-overall_rating', '-review_count']
+
+    
 
 
 

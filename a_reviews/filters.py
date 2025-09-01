@@ -20,7 +20,7 @@ class CourseFilter(django_filters.FilterSet):
             ('analytics', 'Analytics'),
             ('business', 'Business'),
             ('Engineering and Information Technology', 'FEIT'),
-            ('law', 'Law'),
+            ('Law', 'Law'),
             ('health', 'Health'),
             ('science', 'Science'),
         ],
