@@ -153,11 +153,22 @@ def htmx_update_review(request, review_id):
 # Read - Course Views 
 
 # view that returns initial course list 
+from django.db.models import Case, When, Value, BooleanField
+
 def course_list(request):
-    courses = Course.objects.all()
+    courses = Course.objects.annotate(
+        session_available=Case(
+            When(~Q(sessions=[]), then=Value(True)),  # not empty list
+            default=Value(False),
+            output_field=BooleanField()
+        )
+    ).order_by('-session_available', '-overall_rating', '-review_count')
+
     paginator = Paginator(courses, settings.PAGE_SIZE)
     course_page = paginator.page(1)
+    
     return render(request, 'a_reviews/home.html', {'courses': course_page})
+
 
 # view that returns a filtered list of courses 
 def filter_courses(request):

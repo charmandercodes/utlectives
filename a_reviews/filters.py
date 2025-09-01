@@ -19,11 +19,10 @@ class CourseFilter(django_filters.FilterSet):
         choices=[
             ('analytics', 'Analytics'),
             ('business', 'Business'),
-            ('engineering', 'Engineering'),
+            ('Engineering and Information Technology', 'FEIT'),
             ('law', 'Law'),
             ('health', 'Health'),
             ('science', 'Science'),
-            ('IT', 'IT'),
         ],
         widget=forms.CheckboxSelectMultiple(attrs={
             'class': 'checkbox checkbox-primary checkbox-sm'
