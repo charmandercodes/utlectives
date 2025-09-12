@@ -39,7 +39,7 @@ jobs:
       packages: write
       id-token: write
     env:
-      IMAGE: ghcr.io/progsoc/utlectives
+      IMAGE: ghcr.io/charmandercodes/utlectives
       REGISTRY: ghcr.io
     steps:
       - name: Checkout code
@@ -79,7 +79,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /opt/progsoc/utlectives
-            docker pull ghcr.io/progsoc/utlectives:latest
+            docker pull ghcr.io/${{ github.actor }}/utlectives:latest
             docker compose down
             docker compose up -d
             docker image prune -f
