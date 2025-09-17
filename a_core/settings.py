@@ -239,12 +239,14 @@ ACCOUNT_SESSION_REMEMBER = True
 # Email settings (required for email verification and password reset)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_HOST_USER = os.getenv('EMAIL_ADDRESS')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
+if os.getenv("EMAIL_PORT"):
+    EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'progsoc society'
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 ACCOUNT_EMAIL_SUBJECT_PREFIX = '' 
     
 
