@@ -88,6 +88,9 @@ class Command(BaseCommand):
             url_path = course_item.get("URL_MAP_FOR_CONTENT", "")
             full_url = base_url + url_path
             faculty = course_item.get("educationalAreaDisplay", "")
+            
+            # Determine if course has sessions
+            has_sessions = bool(teaching_period and len(teaching_period) > 0)
 
             # Create or update the Course
             course, created = Course.objects.update_or_create(
@@ -99,15 +102,16 @@ class Command(BaseCommand):
                     'faculty': faculty,
                     'sessions': teaching_period if teaching_period else [],
                     'level': level,
+                    'has_sessions': has_sessions,
                 }
             )
 
             if created:
                 created_count += 1
-                self.stdout.write(self.style.SUCCESS(f"Created {level_display} course {code} - {title}"))
+                self.stdout.write(self.style.SUCCESS(f"Created {level_display} course {code} - {title} (has_sessions: {has_sessions})"))
             else:
                 updated_count += 1
-                self.stdout.write(self.style.WARNING(f"Updated {level_display} course {code} - {title}"))
+                self.stdout.write(self.style.WARNING(f"Updated {level_display} course {code} - {title} (has_sessions: {has_sessions})"))
         
         return created_count, updated_count
 

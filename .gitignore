@@ -178,3 +178,5 @@ dump.rdb
 /staticfiles/
 
 /node_modules/
+undergraduate_cleaned/
+postgraduate_cleaned/
