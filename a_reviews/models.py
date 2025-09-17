@@ -18,6 +18,11 @@ class Course(models.Model):
     page_reference = models.URLField(max_length=200, blank=True, null=True)
     faculty = models.CharField(max_length=50, blank=True, null=True)
     has_sessions = models.BooleanField(default=False, db_index=True)
+    LEVEL_CHOICES = [
+    ('UG', 'Undergraduate'),
+    ('PG', 'Postgraduate'),
+    ]
+    level = models.CharField(max_length=2, choices=LEVEL_CHOICES, default='UG', db_index=True)
 
     def __str__(self):
         return f"{self.code} - {self.name}"

@@ -1,0 +1,38 @@
+# Delete all undergraduate courses
+python manage.py import_courses --delete-by --level UG
+
+# Delete all postgraduate courses
+python manage.py import_courses --delete-by --level PG
+
+# Delete all courses from a specific faculty
+python manage.py import_courses --delete-by --faculty "Engineering"
+
+# Delete undergraduate courses from a specific faculty
+python manage.py import_courses --delete-by --faculty "Engineering" --level UG
+
+python manage.py import_courses --delete-by --faculty "Arts and Social Sciences" --level UG
+
+# import courses
+
+python manage.py import_courses --file json/undergrad_arts.json 
+
+
+# Import as undergraduate courses (default)
+python manage.py import_courses --file courses.json
+
+# Import as postgraduate courses
+python manage.py import_courses --file json/postgrad_courses.json --postgrad
+
+python manage.py import_courses --file json/undergrad_arts.json
+
+
+
+
+# Import all undergraduate courses from folder
+python manage.py import_courses --folder undergraduate_cleaned/
+
+# Delete all and import postgraduate courses from folder
+python manage.py import_courses --delete-all --folder postgraduate_cleaned/ --postgrad
+
+# Import specific faculty and level
+python manage.py import_courses --folder undergraduate_cleaned/ --faculty "Engineering"
