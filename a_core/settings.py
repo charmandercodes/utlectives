@@ -211,7 +211,7 @@ ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 ACCOUNT_LOGIN_BY_CODE_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # or 'optional' or 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # or 'optional' or 'none'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_LOGIN_BY_CODE_TIMEOUT = 300  # 5 minutes
 ACCOUNT_LOGIN_BY_CODE_MAX_ATTEMPTS = 3
@@ -222,6 +222,7 @@ ACCOUNT_PREVENT_ENUMERATION = True
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/reviews'  # Redirect after successful login
 LOGOUT_REDIRECT_URL = '/reviews'  # Redirect after logout
+ACCOUNT_SIGNUP_REDIRECT_URL = '/reviews' 
 
 # Session settings (for remember me functionality)
 SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds

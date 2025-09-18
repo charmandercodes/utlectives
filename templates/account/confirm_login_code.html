@@ -21,10 +21,10 @@
                     <p class="text-center text-sm text-gray-500 dark:text-gray-400">
                         {% if request.session.verification_email %}
                             {% blocktrans with email=request.session.verification_email %}
-                                Please enter the 6-digit code sent to your email address: {{email}}
+                                Enter the 6-digit code sent to your email address: {{email}}
                             {% endblocktrans %}
                         {% else %}
-                            {% trans "Please enter the 6-digit code sent to your email address." %}
+                            Please be aware the first email may take a bit longer to arrive. Make sure to check your spam/junk folder if you don't see it in your inbox.
                         {% endif %}
                     </p>
 
