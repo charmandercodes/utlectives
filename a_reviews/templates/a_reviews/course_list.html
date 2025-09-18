@@ -8,36 +8,49 @@
     {% else %}
         <a href="{% url 'course-detail' code=course.code %}" class="block hover:no-underline cursor-pointer">
     {% endif %}
-                <!-- Course Card -->
-    <div class="flex flex-col rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-white p-6 h-full shadow-sm hover:shadow-md transition-shadow">
-                <!-- Header: Course Code and Rating -->
-                <div class="flex justify-between items-start mb-4">
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ course.code }}</h3>
-                    <div>
-                        <div class="flex items-center justify-end gap-0.5 mb-1">
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= course.overall_rating|default:0 %}
-                                    <!-- Filled star (yellow) -->
-                                    <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                    </svg>
-                                {% else %}
-                                    <!-- Empty star (gray) -->
-                                    <svg class="w-4 h-4 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                    </svg>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        <p class="text-sm text-gray-900/20 dark:text-white/20 text-right">{{ course.review_count }} Reviews</p>
+                
+        <!-- Course Card -->
+        <div class="flex flex-col rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-white p-6 h-full shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+            
+            <!-- Postgraduate Ribbon -->
+            {% if course.level == 'PG' %}
+                <div class="absolute top-0 right-0 z-10">
+                    <div class="bg-gradient-to-br from-purple-600 to-purple-800 text-white text-xs font-bold px-3 py-1 transform rotate-12 translate-x-3 -translate-y-1 shadow-lg">
+                        POSTGRAD
                     </div>
+                    <!-- Ribbon tail effect -->
+                    <div class="absolute top-6 right-2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-purple-800 transform rotate-12"></div>
                 </div>
-
-                <!-- Course Name - Centered and flexible -->
-        <div class="flex-grow flex items-center justify-center mb-6">
-            <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200 text-center">{{ course.name }}</h4>
-        </div>
-
+            {% endif %}
+                
+            <!-- Header: Course Code and Rating -->
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ course.code }}</h3>
+                <div>
+                    <div class="flex items-center justify-end gap-0.5 mb-1">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= course.overall_rating|default:0 %}
+                                <!-- Filled star (yellow) -->
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                            {% else %}
+                                <!-- Empty star (gray) -->
+                                <svg class="w-4 h-4 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="text-sm text-gray-900/20 dark:text-white/20 text-right">{{ course.review_count }} Reviews</p>
+                </div>
+            </div>
+             
+            <!-- Course Name - Centered and flexible -->
+            <div class="flex-grow flex items-center justify-center mb-6">
+                <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200 text-center">{{ course.name }}</h4>
+            </div>
+             
             <!-- Semester Tags - Bottom aligned -->
             <div class="flex flex-wrap justify-center gap-2 mt-auto">
                 {% for session in course.sessions %}
@@ -50,7 +63,6 @@
                     </span>
                 {% endfor %}
             </div>
-    </div>
+        </div>
     </a>
 {% endfor %}
-
