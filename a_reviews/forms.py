@@ -1,24 +1,88 @@
 from django import forms
 from .models import Review
+import datetime
 
 class ReviewForm(forms.ModelForm):
 
-    course_completion = forms.CharField(
-        max_length=20,
-        widget=forms.TextInput(attrs={
-            'class': 'block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500',
-            'placeholder': '2025-AUTUMN',
-            'pattern': r'\d{4}-(AUTUMN|SPRING|SUMMER|WINTER)',
-            'title': 'Please enter in format: YYYY-SEASON (e.g., 2025-AUTUMN)'
+        # Get current year and create a range
+    current_year = datetime.datetime.now().year
+    year_choices = [(year, str(year)) for year in range(current_year - 5, current_year + 2)]
+    
+    session_choices = [
+        # Main semester sessions (90.6% of courses)
+        ('SPRING', 'Spring'),
+        ('AUTUMN', 'Autumn'),
+        ('SUMMER', 'Summer'),
+        
+        # Sub-semester sessions (10.6% of courses)
+        ('AUTUMN_B', 'Autumn B'),
+        ('SPRING_B', 'Spring B'),
+        ('SPRING_C', 'Spring C'),
+        ('AUTUMN_C', 'Autumn C'),
+        ('AUTUMN_D', 'Autumn D'),
+        ('SPRING_D', 'Spring D'),
+        
+        # Research sessions (11.1% of courses)
+        ('RESEARCH_1', 'Research 1'),
+        ('RESEARCH_2', 'Research 2'),
+        
+        # Intensive/Block sessions (8.1% of courses)
+        ('SESSION_1', 'Session 1'),
+        ('SESSION_2', 'Session 2'),
+        ('SESSION_3', 'Session 3'),
+        ('SESSION_4', 'Session 4'),
+        ('SESSION_5', 'Session 5'),
+        ('SESSION_6', 'Session 6'),
+        
+        # Specific month sessions (6.6% of courses)
+        ('JANUARY', 'January'),
+        ('FEBRUARY', 'February'),
+        ('MARCH', 'March'),
+        ('APRIL', 'April'),
+        ('MAY', 'May'),
+        ('JUNE', 'June'),
+        ('JULY', 'July'),
+        ('AUGUST', 'August'),
+        ('SEPTEMBER', 'September'),
+        ('OCTOBER', 'October'),
+        ('NOVEMBER', 'November'),
+        ('DECEMBER', 'December'),
+        
+        # Multi-month sessions (1.2% of courses)
+        ('JAN_MAR', 'January-March'),
+        ('MAR_MAY', 'March-May'),
+        ('MAY_JULY', 'May-July'),
+        ('JULY_SEPT', 'July-September'),
+        ('AUG_OCT', 'August-October'),
+        ('OCT_DEC', 'October-December'),
+        ('DEC_FEB', 'December-February'),
+        
+        # Special sessions
+        ('CALENDAR_B_SPRING', 'Calendar B Spring'),
+    ]
+
+
+    completion_year = forms.ChoiceField(
+        choices=year_choices,
+        initial=current_year,
+        widget=forms.Select(attrs={
+            'class': 'block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500'
+        })
+    )
+
+    completion_session = forms.ChoiceField(
+        choices=session_choices,
+        widget=forms.Select(attrs={
+            'class': 'block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500'
         })
     )
     
+
     class Meta:
         model = Review
         fields = [
             'title', 'text_review', 'overall_rating', 'enjoyment', 
-            'usefullness', 'manageability', 'grade', 'course_completion', 
-            'is_anonymous'
+            'usefullness', 'manageability', 'grade', 'is_anonymous'
         ]
         # Exclude course and author - these should be set in the view
         
@@ -88,6 +152,17 @@ class ReviewForm(forms.ModelForm):
                 'class': 'form-check-input'
             })
         }
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        # Combine year and session into the course_completion field
+        year = self.cleaned_data['completion_year']
+        session = self.cleaned_data['completion_session']
+        instance.course_completion = f"{year}-{session}"
+        
+        if commit:
+            instance.save()
+        return instance
 
 
 

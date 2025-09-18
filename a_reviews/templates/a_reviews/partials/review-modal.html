@@ -164,20 +164,33 @@
 
                     <!-- Course Completion -->
                     <div class="col-span-1">
-                        <label for="{{ form.course_completion.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{{ form.course_completion.label }}</label>
-                        {% if form.course_completion.errors %}
-                            <div class="text-red-600 text-sm mb-1">{{ form.course_completion.errors.0 }}</div>
+                        <label for="{{ form.completion_year.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Year</label>
+                        {% if form.completion_year.errors %}
+                            <div class="text-red-600 text-sm mb-1">{{ form.completion_year.errors.0 }}</div>
                         {% endif %}
-                        <input type="text"
-                               name="{{ form.course_completion.name }}"
-                               id="{{ form.course_completion.id_for_label }}"
-                               value="{{ form.course_completion.value|default:'' }}"
-                               pattern="\d{4}-(AUTUMN|SPRING|SUMMER|WINTER)"
-                               title="Please enter in format: YYYY-SEASON (e.g., 2025-AUTUMN)"
-                               class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                               placeholder="2025-AUTUMN"
-                               required />
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Format: YYYY-SEASON (AUTUMN, SPRING, SUMMER, WINTER)</p>
+                        <select name="{{ form.completion_year.name }}" 
+                                id="{{ form.completion_year.id_for_label }}"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                required>
+                            {% for value, label in form.completion_year.field.choices %}
+                                <option value="{{ value }}" {% if form.completion_year.value == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="col-span-1">
+                        <label for="{{ form.completion_session.id_for_label }}" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Session</label>
+                        {% if form.completion_session.errors %}
+                            <div class="text-red-600 text-sm mb-1">{{ form.completion_session.errors.0 }}</div>
+                        {% endif %}
+                        <select name="{{ form.completion_session.name }}" 
+                                id="{{ form.completion_session.id_for_label }}"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                required>
+                            {% for value, label in form.completion_session.field.choices %}
+                                <option value="{{ value }}" {% if form.completion_session.value == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
 
                     <!-- Grade -->

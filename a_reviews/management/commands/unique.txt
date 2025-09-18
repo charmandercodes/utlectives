@@ -1,0 +1,17 @@
+# Basic usage - shows unique sessions
+python manage.py get_unique_sessions
+
+# Show with statistics
+python manage.py get_unique_sessions --show-stats
+
+# Get Django choices format
+python manage.py get_unique_sessions --format=choices
+
+# Get JSON format
+python manage.py get_unique_sessions --format=json
+
+# Save to file
+python manage.py get_unique_sessions --format=choices --save-to-file=session_choices.py
+
+# Show detailed stats and save
+python manage.py get_unique_sessions --show-stats --save-to-file=session_analysis.txt
