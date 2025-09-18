@@ -24,7 +24,7 @@
                                 Enter the 6-digit code sent to your email address: {{email}}
                             {% endblocktrans %}
                         {% else %}
-                            Please be aware the first email may take a bit longer to arrive. Make sure to check your spam/junk folder if you don't see it in your inbox.
+                            Please be aware the first email may take 5 minutes or longer to arrive. Also make sure to check your spam/junk folder.
                         {% endif %}
                     </p>
 
@@ -55,7 +55,7 @@
                                 id="{{ form.code.id_for_label }}"
                                 value="{{ form.code.value|default:'' }}"
                                 class="bg-gray-50 border {% if form.code.errors %}border-red-500{% else %}border-gray-300{% endif %} text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center text-lg tracking-widest"
-                                placeholder="000000"
+                                placeholder="XXXXXX"
                                 maxlength="6"
                                 autocomplete="one-time-code"
                                 required
