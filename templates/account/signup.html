@@ -56,6 +56,17 @@
                                 <div class="mt-2 text-sm text-red-600 dark:text-red-500">
                                     {% for error in form.email.errors %}
                                         <p>{{ error }}</p>
+                                        {% if "already exists" in error %}
+                                            <p class="mt-2 text-sm">
+                                                <a href="{% url 'account_login' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}" 
+                                                   class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                                    </svg>
+                                                    Sign in to your existing account instead
+                                                </a>
+                                            </p>
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -85,8 +96,6 @@
                                 {% endif %}
                             </div>
                         {% endif %}
-
-                
 
                     <!-- Terms and Conditions (optional) -->
                         <div class="flex items-start">

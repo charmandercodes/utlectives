@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.conf import settings
+from django.db.models import Case, When, IntegerField
 
 
 
@@ -154,7 +155,16 @@ def htmx_update_review(request, review_id):
 
 # view that returns initial course list 
 def course_list(request):
-    courses = Course.objects.order_by('-has_sessions', '-overall_rating', '-review_count')
+    courses = Course.objects.order_by(
+        Case(
+            When(level='UG', then=1),
+            When(level='PG', then=2),
+            output_field=IntegerField(),
+        ),
+        '-has_sessions', 
+        '-overall_rating', 
+        '-review_count'
+    )
     paginator = Paginator(courses, settings.PAGE_SIZE)
     course_page = paginator.page(1)
     return render(request, 'a_reviews/home.html', {'courses': course_page})

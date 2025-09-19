@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 
 from a_users.adapters import User
 
-
 class CustomSignupForm(SignupForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,19 +17,35 @@ class CustomSignupForm(SignupForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         
-        if email:
-            # Check if email ends with @student.uts.edu.au
-            if not email.endswith('@student.uts.edu.au'):
-                raise forms.ValidationError(
-                    'Only UTS student emails (@student.uts.edu.au) are allowed to register.'
-                )
-            
-            # Optional: Additional regex validation for extra security
-            pattern = r'^[a-zA-Z0-9._%+-]+@student\.uts\.edu\.au$'
-            if not re.match(pattern, email):
-                raise forms.ValidationError(
-                    'Please enter a valid UTS student email address.'
-                )
+        if not email:
+            return email
+        
+        # Validate UTS email domain
+        if not email.endswith('@student.uts.edu.au'):
+            raise forms.ValidationError(
+                'Only UTS student emails (@student.uts.edu.au) are allowed to register.'
+            )
+        
+        # Optional: Additional regex validation for extra security
+        pattern = r'^[a-zA-Z0-9._%+-]+@student\.uts\.edu\.au$'
+        if not re.match(pattern, email):
+            raise forms.ValidationError(
+                'Please enter a valid UTS student email address.'
+            )
+        
+        # Check if email already exists in User model
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError(
+                "An account with this email address already exists. "
+                "Please sign in instead or use a different email address."
+            )
+        
+        # Also check EmailAddress model for verified/unverified emails
+        if EmailAddress.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError(
+                "An account with this email address already exists. "
+                "Please sign in instead or use a different email address."
+            )
         
         return email
     

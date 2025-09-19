@@ -21,7 +21,7 @@
                     <p class="text-center text-sm text-gray-500 dark:text-gray-400">
                         {% if request.session.verification_email %}
                             {% blocktrans with email=request.session.verification_email %}
-                                Enter the 6-digit code sent to your email address: {{email}}
+                                Enter the 6 character code sent to your email address: {{email}}
                             {% endblocktrans %}
                         {% else %}
                             Please be aware the first email may take 5 minutes or longer to arrive. Also make sure to check your spam/junk folder.
@@ -61,7 +61,7 @@
                                 required
                             >
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 text-center">
-                                {% trans "Enter the 6-digit code from your email" %}
+                                {% trans "Enter the 6 character code from your email" %}
                             </p>
                             {% if form.code.errors %}
                                 <div class="mt-2 text-sm text-red-600 dark:text-red-500">

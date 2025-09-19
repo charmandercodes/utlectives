@@ -11,13 +11,6 @@ User = get_user_model()
 
 class CustomAccountAdapter(DefaultAccountAdapter):
     
-    def clean_email(self, email):
-        # Only validate email format - don't create users here
-        if not email.endswith('@student.uts.edu.au'):
-            raise ValidationError("Only UTS student emails (@student.uts.edu.au) are allowed.")
-        
-        return email
-    
     def get_login_redirect_url(self, request):
         redirect_url = super().get_login_redirect_url(request)
         if redirect_url and redirect_url != '/':

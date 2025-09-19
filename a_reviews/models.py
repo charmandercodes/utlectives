@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Avg
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import Case, When, IntegerField
 
 # Create your models here.
 
@@ -64,7 +65,16 @@ class Course(models.Model):
         ])
 
     class Meta:
-        ordering = ['-has_sessions', '-overall_rating', '-review_count']
+        ordering = [
+            Case(
+                When(level='UG', then=1),
+                When(level='PG', then=2),
+                output_field=IntegerField(),
+            ),
+            '-has_sessions', 
+            '-overall_rating', 
+            '-review_count'
+            ]
 
     
 
