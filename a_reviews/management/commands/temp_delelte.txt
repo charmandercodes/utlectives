@@ -1,0 +1,5 @@
+# Check what would be deleted first
+python manage.py cleanup_courses --dry-run
+
+# Then do the actual cleanup
+python manage.py cleanup_courses
