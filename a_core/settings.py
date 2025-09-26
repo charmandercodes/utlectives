@@ -73,7 +73,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
-    "silk.middleware.SilkyMiddleware"
+    "silk.middleware.SilkyMiddleware",
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = "a_core.urls"
@@ -121,7 +122,6 @@ else:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-
 
 
 

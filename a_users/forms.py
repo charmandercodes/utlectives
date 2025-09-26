@@ -2,6 +2,7 @@ from django import forms
 from allauth.account.forms import SignupForm
 import re
 from django.core.exceptions import ValidationError
+from allauth.account.models import EmailAddress
 
 from a_users.adapters import User
 

@@ -12,11 +12,8 @@ from django.views.decorators.http import require_POST
 from allauth.account.forms import ChangePasswordForm
 from django_htmx.http import HttpResponseClientRedirect
 from allauth.account.views import SignupView
-
 from a_users.forms import UpdateUsernameForm
 # Create your views here.
-
-
 
 # Basic page views
 
@@ -79,7 +76,6 @@ def update_users_review(request, review_id):
 
 
 # Update Username
-
 
 @login_required
 def change_password_inline(request):
