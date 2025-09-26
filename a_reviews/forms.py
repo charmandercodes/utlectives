@@ -102,7 +102,7 @@ class ReviewForm(forms.ModelForm):
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter a title for your review',
-                'maxlength': 50
+                'maxlength': 100
             }),
             
             'text_review': forms.Textarea(attrs={
