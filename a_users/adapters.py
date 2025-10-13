@@ -10,6 +10,25 @@ from allauth.account.models import EmailAddress
 User = get_user_model()
 
 class CustomAccountAdapter(DefaultAccountAdapter):
+
+    
+    def save_user(self, request, user, form, commit=True):
+        """
+        Saves a new User instance using information provided in the
+        signup form and extracts username from email.
+        """
+        user = super().save_user(request, user, form, commit=False)
+        
+        # Extract and format username from email
+        if user.email:
+            # Get the part before @ and before the first .
+            username_part = user.email.split('@')[0].split('.')[0]
+            user.username = username_part.capitalize()
+        
+        if commit:
+            user.save()
+        
+        return user
     
     def get_login_redirect_url(self, request):
         redirect_url = super().get_login_redirect_url(request)

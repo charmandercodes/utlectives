@@ -22,9 +22,10 @@ class CustomSignupForm(SignupForm):
             return email
         
         # Validate UTS email domain
-        if not email.endswith('@student.uts.edu.au'):
+        allowed_domains = ('@student.uts.edu.au', '@alumni.uts.edu.au', '@staff.uts.edu.au')
+        if not email.endswith(allowed_domains):
             raise forms.ValidationError(
-                'Only UTS student emails (@student.uts.edu.au) are allowed to register.'
+                'Only UTS emails (@student.uts.edu.au, @alumni.uts.edu.au, or @staff.uts.edu.au) are allowed to register.'
             )
         
         # Optional: Additional regex validation for extra security
