@@ -13,52 +13,7 @@ class ReviewForm(forms.ModelForm):
         ('SPRING', 'Spring'),
         ('AUTUMN', 'Autumn'),
         ('SUMMER', 'Summer'),
-        
-        # Sub-semester sessions (10.6% of courses)
-        ('AUTUMN_B', 'Autumn B'),
-        ('SPRING_B', 'Spring B'),
-        ('SPRING_C', 'Spring C'),
-        ('AUTUMN_C', 'Autumn C'),
-        ('AUTUMN_D', 'Autumn D'),
-        ('SPRING_D', 'Spring D'),
-        
-        # Research sessions (11.1% of courses)
-        ('RESEARCH_1', 'Research 1'),
-        ('RESEARCH_2', 'Research 2'),
-        
-        # Intensive/Block sessions (8.1% of courses)
-        ('SESSION_1', 'Session 1'),
-        ('SESSION_2', 'Session 2'),
-        ('SESSION_3', 'Session 3'),
-        ('SESSION_4', 'Session 4'),
-        ('SESSION_5', 'Session 5'),
-        ('SESSION_6', 'Session 6'),
-        
-        # Specific month sessions (6.6% of courses)
-        ('JANUARY', 'January'),
-        ('FEBRUARY', 'February'),
-        ('MARCH', 'March'),
-        ('APRIL', 'April'),
-        ('MAY', 'May'),
-        ('JUNE', 'June'),
-        ('JULY', 'July'),
-        ('AUGUST', 'August'),
-        ('SEPTEMBER', 'September'),
-        ('OCTOBER', 'October'),
-        ('NOVEMBER', 'November'),
-        ('DECEMBER', 'December'),
-        
-        # Multi-month sessions (1.2% of courses)
-        ('JAN_MAR', 'January-March'),
-        ('MAR_MAY', 'March-May'),
-        ('MAY_JULY', 'May-July'),
-        ('JULY_SEPT', 'July-September'),
-        ('AUG_OCT', 'August-October'),
-        ('OCT_DEC', 'October-December'),
-        ('DEC_FEB', 'December-February'),
-        
-        # Special sessions
-        ('CALENDAR_B_SPRING', 'Calendar B Spring'),
+        ('OTHER', 'Other'),
     ]
 
 
